@@ -67,7 +67,7 @@ class _TimeSetScreenState extends State<TimeSetScreen> {
         child: const CustomScrollView(
           slivers: [
             SliverAppBar(
-              expandedHeight: 54.0,
+              expandedHeight: 64.0,
               flexibleSpace: TimeInsertPallet(),
               backgroundColor: Colors.white,
               floating: true,
