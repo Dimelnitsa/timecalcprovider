@@ -1,0 +1,15 @@
+{
+    "add":"Add",
+    "quote":"Quote",
+    "illustration":"Illustration",
+    "table":"Table",
+    "delete":"Delete",
+    "several":"Several",
+    "single":"Single",
+    "description":"Description",
+    "Read_a_quote":"Read a quote",
+    "Discuss_illustration":"Discuss illustration",
+    "Discuss_frame":"Discuss frame",
+    "editing_item":"Editing item",
+    "new_item":"New item"
+}

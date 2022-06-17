@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:timecalcprovider/repository/counter_model.dart';
@@ -29,6 +30,22 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate
+      ],
+      supportedLocales: const [
+        Locale('ru', ''),
+        Locale('ukr', ''),
+        Locale('bel', ''),
+        Locale('pl', ''),
+        Locale('eng', ''),
+        Locale('deu', ''),
+        Locale('isl', ''),
+        Locale('chi', ''),
+        Locale('jpn', ''),
+      ],
       title: 'Time Calculator',
       scrollBehavior: const ConstantScrollBehavior(),
       theme: ThemeData(
