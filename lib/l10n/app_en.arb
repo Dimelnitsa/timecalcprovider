@@ -4,7 +4,21 @@
       "description": "to add single item"
     },
     "several": "Several",
-        "@single": {
+        "@several": {
           "description": "to add several items"
-        }
+        },
+        "add":"Add",
+        "@add": {
+                  "description": "to add several items"
+                },
+           "quote":"Quote",
+           "illustration":"Illustration",
+           "table":"Table",
+           "delete":"Delete",
+           "description":"Description",
+           "read_a_quote":"Read a quote",
+           "discuss_illustration":"Discuss illustration",
+           "discuss_frame":"Discuss frame",
+           "editing_item":"Editing item",
+           "new_item":"New item"
 }

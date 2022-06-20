@@ -1,4 +1,15 @@
 {
    "single": "Одинарный",
-   "several": "Несколько"
+   "several": "Несколько",
+   "add":"Добавить",
+   "quote":"Цитата",
+   "illustration":"Иллюстрация",
+   "table":"Рамка",
+   "delete":"Удалить",
+   "description":"Описание",
+   "read_a_quote":"Зачитать цитату",
+   "discuss_illustration":"Обсудить иллюстрацию",
+   "discuss_frame":"Обсудить рамку",
+   "editing_item":"Редактирование пункта",
+   "new_item":"Новый пункт"
 }
