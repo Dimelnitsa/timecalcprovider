@@ -8,6 +8,7 @@ import 'edited_item_widget.dart';
 import 'widgets/text_choice_chips_widget.dart';
 import 'widgets/text_input_field_widget.dart';
 import 'widgets/wrap_number_chips_widget.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class EditItemScreen extends StatelessWidget {
   final Item item;
@@ -32,7 +33,7 @@ class EditItemBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Редактирование'),
+        title: Text(AppLocalizations.of(context)!.editing_item),
       ),
       body: SingleChildScrollView(
         child: Column(

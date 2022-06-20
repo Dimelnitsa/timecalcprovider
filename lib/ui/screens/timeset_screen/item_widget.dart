@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:timecalcprovider/repository/item.dart';
 import 'timeset_model.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ItemWidget extends StatelessWidget {
   const ItemWidget({Key? key, required this.item, required this.index})
@@ -61,6 +62,7 @@ class MyPopupMenuButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // final _timeSet= context.watch<TimeModule>().timeSet;
+    final local = AppLocalizations.of(context)!;
     return PopupMenuButton(
         onSelected: (value) {
           switch (value) {
@@ -88,48 +90,47 @@ class MyPopupMenuButton extends StatelessWidget {
               PopupMenuItem(
                 value: 1,
                 child: Row(
-                  children: const [Text('Добавить '), Icon(Icons.arrow_upward)],
+                  children: [Text(local.add), const Icon(Icons.arrow_upward)],
                 ),
               ),
               PopupMenuItem(
                 value: 2,
                 child: Row(
-                  children: const [
-                    Text('Добавить '),
-                    Icon(Icons.arrow_downward)
-                  ],
+                  children: [Text(local.add), const Icon(Icons.arrow_downward)],
                 ),
               ),
               PopupMenuItem(
                 value: 4,
                 child: Row(
-                  children: const [Text('Цитата '), Icon(Icons.menu_book)],
+                  children: [
+                    Text('${local.quote} '),
+                    const Icon(Icons.menu_book)],
                 ),
               ),
               PopupMenuItem(
                 value: 5,
                 child: Row(
-                  children: const [
-                    Text('Иллюстрация '),
-                    Icon(Icons.photo_album)
+                  children: [
+                    Text('${local.illustration} '),
+                    const Icon(Icons.photo_album)
                   ],
                 ),
               ),
               PopupMenuItem(
                 value: 6,
                 child: Row(
-                  children: const [
-                    Text('Рамка '),
-                    Icon(Icons.table_rows_outlined)
+                  children: [
+                    Text('${local.table} '),
+                    const Icon(Icons.table_rows_outlined)
                   ],
                 ),
               ),
               PopupMenuItem(
                 value: 3,
                 child: Row(
-                  children: const [
-                    Text('Удалить '),
-                    Icon(Icons.delete_forever)
+                  children: [
+                    Text('${local.delete} '),
+                    const Icon(Icons.delete_forever)
                   ],
                 ),
               ),
