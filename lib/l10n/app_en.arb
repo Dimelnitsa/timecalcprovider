@@ -1,0 +1,10 @@
+{
+    "single": "Single",
+    "@single": {
+      "description": "to add single item"
+    },
+    "several": "Several",
+        "@single": {
+          "description": "to add several items"
+        }
+}
