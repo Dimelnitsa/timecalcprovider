@@ -11,5 +11,12 @@
    "discuss_illustration":"Обсудить иллюстрацию",
    "discuss_frame":"Обсудить рамку",
    "editing_item":"Редактирование пункта",
-   "new_item":"Новый пункт"
+   "new_item":"Новый пункт",
+   "removal":"Удаление",
+   "delete_confirmation":"Вы действительно хотите удалить все?",
+   "cancel":"Отмена",
+   "ok":"Ok",
+   "how_many_points":"Сколько пунктов добавить:",
+   "starting_digit":"Начальная цифра:",
+   "new_item":"Ввод нового"
 }

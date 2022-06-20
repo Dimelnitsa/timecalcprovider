@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:timecalcprovider/repository/counter_model.dart';
 import '../timeset_screen/timeset_model.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class NumeralItemDialog extends StatefulWidget {
   const NumeralItemDialog({Key? key}) : super(key: key);
@@ -31,7 +32,7 @@ class _NumeralItemDialogState extends State<NumeralItemDialog> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text('Добавить пунктов:'),
+            Text(AppLocalizations.of(context)!.how_many_points),
             Container(
               decoration: BoxDecoration(
                 color: Colors.grey[300],
@@ -82,7 +83,7 @@ class _NumeralItemDialogState extends State<NumeralItemDialog> {
             const Divider(
               height: 16.0,
             ),
-            const Text('Начальная цифра:'),
+             Text(AppLocalizations.of(context)!.starting_digit),
         Container(
           decoration: BoxDecoration(
             color: Colors.grey[300],
@@ -138,7 +139,7 @@ class _NumeralItemDialogState extends State<NumeralItemDialog> {
       actions: <Widget>[
         MaterialButton(
           elevation: 5.0,
-          child: const Text('Ок'),
+          child: Text(AppLocalizations.of(context)!.ok),
           onPressed: () {
             context.read<TimeSetModule>().addListItems(counter, startNumber);
             _modelRead.startNumber = startNumber + counter;
@@ -148,7 +149,7 @@ class _NumeralItemDialogState extends State<NumeralItemDialog> {
         ),
         MaterialButton(
           elevation: 5.0,
-          child: const Text('Отмена'),
+          child: Text(AppLocalizations.of(context)!.cancel),
           onPressed: () {
             Navigator.of(context).pop();
           },

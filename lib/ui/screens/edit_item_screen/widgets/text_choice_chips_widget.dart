@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../edit_item_model.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TextChoiceChipsWidget extends StatelessWidget {
   const TextChoiceChipsWidget({Key? key}) : super(key: key);
@@ -16,10 +17,10 @@ class TextChoiceChipsWidget extends StatelessWidget {
           label: SizedBox(
             width: 150,
             child: TextField(
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 isDense: true,
                 isCollapsed: true,
-                hintText: 'Добавить...',
+                hintText: AppLocalizations.of(context)!.add,
                 border: InputBorder.none,
               ),
               onSubmitted: (value) {

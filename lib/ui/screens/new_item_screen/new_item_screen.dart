@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'new_item_model.dart';
 import 'widgets/text_input_field_widget.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class NewItemScreen extends StatelessWidget {
   const NewItemScreen({Key? key}) : super(key: key);
@@ -25,7 +26,7 @@ class NewItemBody extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Ввод нового'),
+        title: Text(AppLocalizations.of(context)!.new_item),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -37,7 +38,7 @@ class NewItemBody extends StatelessWidget {
             const WrapNumberChips(),
             ListTile(
               leading: const Icon(Icons.menu_book_outlined),
-              title: const Text('Зачитать цитату: '),
+              title: Text('${AppLocalizations.of(context)!.read_a_quote}: '),
               trailing: Switch(
                   value: context.watch<NewItemModel>().isVerse,
                   onChanged: (bool value) {
@@ -46,7 +47,7 @@ class NewItemBody extends StatelessWidget {
             ),
             ListTile(
               leading: const Icon(Icons.photo_size_select_actual_outlined),
-              title: const Text('Обсудить иллюстрацию: '),
+              title: Text('${AppLocalizations.of(context)!.discuss_illustration}: '),
               trailing: Switch(
                   value: context.watch<NewItemModel>().isPicture,
                   onChanged: (bool value) {
@@ -55,7 +56,7 @@ class NewItemBody extends StatelessWidget {
             ),
             ListTile(
               leading: const Icon(Icons.table_chart_outlined),
-              title: const Text('Обсудить рамку: '),
+              title: Text('${AppLocalizations.of(context)!.discuss_frame}: '),
               trailing: Switch(
                   value: context.watch<NewItemModel>().isTable,
                   onChanged: (bool value) {
@@ -133,10 +134,10 @@ class TextChoiceChips extends StatelessWidget {
             label: SizedBox(
               width: 150,
               child: TextField(
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   isDense: true,
                   isCollapsed: true,
-                  hintText: 'Добавить...',
+                  hintText: AppLocalizations.of(context)!.add,
                   border: InputBorder.none,
                 ),
                 onSubmitted: (value) {
