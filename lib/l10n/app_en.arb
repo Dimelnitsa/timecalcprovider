@@ -20,5 +20,12 @@
            "discuss_illustration":"Discuss illustration",
            "discuss_frame":"Discuss frame",
            "editing_item":"Editing item",
+           "new_item":"New item",
+           "removal":"Removal",
+           "delete_confirmation":"Are you sure you want to delete everything?",
+           "cancel":"Cancel",
+           "ok":"Ok",
+           "how_many_points":"How many points to add:",
+           "starting_digit":"Starting digit:",
            "new_item":"New item"
 }

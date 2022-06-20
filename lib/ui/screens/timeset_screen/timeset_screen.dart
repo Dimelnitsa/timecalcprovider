@@ -31,7 +31,7 @@ class _TimeSetScreenState extends State<TimeSetScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('${_timeSet.title} расчет'),
+        title: Text(_timeSet.title),
         actions: [
           IconButton(
               onPressed: () {
@@ -95,19 +95,19 @@ Future<void> showDialogDeleteAll(BuildContext context) {
   return showDialog(
     context: context,
     builder: (BuildContext context) => AlertDialog(
-      title: const Text('Удаление'),
-      content: const Text('Вы действительно хотите удалить все?'),
+      title: Text(AppLocalizations.of(context)!.removal),
+      content: Text(AppLocalizations.of(context)!.delete_confirmation),
       actions: <Widget>[
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: const Text('Cancel'),
+          child: Text(AppLocalizations.of(context)!.cancel),
         ),
         TextButton(
           onPressed: () {
             context.read<TimeSetModule>().clearAllList(context);
             Navigator.of(context).pop();
           },
-          child: const Text('OK'),
+          child: Text(AppLocalizations.of(context)!.ok),
         ),
       ],
     ),
