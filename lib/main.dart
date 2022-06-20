@@ -6,6 +6,7 @@ import 'package:timecalcprovider/repository/counter_model.dart';
 import 'ui/screens/timeset_screen/timeset_model.dart';
 import 'ui/screens/drawer_screen/draw_screen_model.dart';
 import 'navigation/navigation_routs.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() async {
   //WidgetsFlutterBinding.ensureInitialized();
@@ -47,6 +48,16 @@ class MyApp extends StatelessWidget {
         Locale('jpn', ''),
       ],
       title: 'Time Calculator',
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('en', ''), // English, no country code
+        Locale('ru', ''),
+      ],
       scrollBehavior: const ConstantScrollBehavior(),
       theme: ThemeData(
         primarySwatch: Colors.blueGrey,

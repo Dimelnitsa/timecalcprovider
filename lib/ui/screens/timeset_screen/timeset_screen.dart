@@ -7,6 +7,7 @@ import '../dialogs_screen/save_set_dialog.dart';
 import '../drawer_screen/drawer_screen.dart';
 import 'list_of_items.dart';
 import 'timeset_model.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TimeSetScreen extends StatefulWidget {
   const TimeSetScreen({Key? key}) : super(key: key);
@@ -124,13 +125,13 @@ class MenuFab extends StatelessWidget {
       overlayColor: Colors.grey,
       children: [
         SpeedDialChild(
-          label: 'Одинарный',
+          label: AppLocalizations.of(context)!.single,
           onTap: () {
             Navigator.pushNamed(context, AppNavigationRoutsName.newItemScreen);
           },
         ),
         SpeedDialChild(
-          label: 'Несколько',
+          label: AppLocalizations.of(context)!.several,
           onTap: () {
             context.read<TimeSetModule>().showDialogAddNumeralItems(context);
           },
