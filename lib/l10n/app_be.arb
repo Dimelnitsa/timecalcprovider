@@ -1,0 +1,21 @@
+{
+	"add": "дадаць",
+	"cancel": "Адмена",
+	"delete": "Выдаліць",
+	"delete_confirmation": "Вы ўпэўнены, што хочаце выдаліць усё?",
+	"description": "Апісанне",
+	"discuss_frame": "Абмеркаваць кадр",
+	"discuss_illustration": "Абмяркуйце ілюстрацыю",
+	"editing_item": "Рэдагаванне пункта",
+	"how_many_points": "Колькі балаў дадаць:",
+	"illustration": "Ілюстрацыя",
+	"new_item": "Новы прадмет",
+	"ok": "добра",
+	"quote": "Цытую",
+	"read_a_quote": "Прачытайце цытату",
+	"removal": "Выдаленне",
+	"several": "Некалькі",
+	"single": "Халасты",
+	"starting_digit": "Пачатковая лічба:",
+	"table": "Рамка"
+}
