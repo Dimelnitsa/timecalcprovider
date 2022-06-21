@@ -1,0 +1,21 @@
+{
+	"add": "добави",
+	"cancel": "Отказ",
+	"delete": "Изтрий",
+	"delete_confirmation": "Сигурни ли сте, че искате да изтриете всичко?",
+	"description": "Описание",
+	"discuss_frame": "Обсъдете рамката",
+	"discuss_illustration": "Обсъдете илюстрацията",
+	"editing_item": "Редактиране на елемент",
+	"how_many_points": "Колко точки да добавите:",
+	"illustration": "Илюстрация",
+	"new_item": "Нов продукт",
+	"ok": "добре",
+	"quote": "Цитат",
+	"read_a_quote": "Прочетете цитат",
+	"removal": "отстраняване",
+	"several": "Няколко",
+	"single": "единичен",
+	"starting_digit": "Начална цифра:",
+	"table": "маса"
+}
