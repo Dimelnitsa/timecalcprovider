@@ -1,0 +1,21 @@
+{
+	"add": "追加",
+	"cancel": "キャンセル",
+	"delete": "削除",
+	"delete_confirmation": "すべて削除してもよろしいですか？",
+	"description": "説明",
+	"discuss_frame": "フレームについて話し合う",
+	"discuss_illustration": "イラストについて話し合う",
+	"editing_item": "編集項目",
+	"how_many_points": "追加するポイント数：",
+	"illustration": "図",
+	"new_item": "新商品",
+	"ok": "OK",
+	"quote": "見積もり",
+	"read_a_quote": "見積もりを読む",
+	"removal": "除去",
+	"several": "いくつかの",
+	"single": "シングル",
+	"starting_digit": "開始桁：",
+	"table": "表"
+}
