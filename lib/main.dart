@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:timecalcprovider/l10n/l10n.dart';
 import 'package:timecalcprovider/repository/counter_model.dart';
 import 'ui/screens/timeset_screen/timeset_model.dart';
 import 'ui/screens/drawer_screen/draw_screen_model.dart';
@@ -38,20 +39,7 @@ class MyApp extends StatelessWidget {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      supportedLocales: const [
-        Locale('en', ''), // English, no country code
-        Locale('ru', ''),
-        Locale('pl', ''),
-        Locale('be', ''),
-        Locale('uk', ''),
-        Locale('es', ''),
-        Locale('de', ''),
-        Locale('bg', ''),
-        Locale('fr', ''),
-        Locale('it', ''),
-        Locale('ja', ''),
-        Locale('zh', ''),
-      ],
+      supportedLocales: L10n.all,
       scrollBehavior: const ConstantScrollBehavior(),
       theme: ThemeData(
         primarySwatch: Colors.blueGrey,
