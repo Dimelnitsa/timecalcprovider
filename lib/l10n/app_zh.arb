@@ -1,0 +1,21 @@
+{
+	"add": "加",
+	"cancel": "取消",
+	"delete": "删除",
+	"delete_confirmation": "您确定要删除所有内容吗？",
+	"description": "描述",
+	"discuss_frame": "讨论框架",
+	"discuss_illustration": "讨论图",
+	"editing_item": "编辑项目",
+	"how_many_points": "加多少分：",
+	"illustration": "插图",
+	"new_item": "新物品",
+	"ok": "好",
+	"quote": "引用",
+	"read_a_quote": "阅读报价",
+	"removal": "移动",
+	"several": "一些",
+	"single": "单",
+	"starting_digit": "起始数字：",
+	"table": "表"
+}
