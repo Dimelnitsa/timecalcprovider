@@ -1,0 +1,21 @@
+{
+	"add": "Додати",
+	"cancel": "Скасувати",
+	"delete": "Видалити",
+	"delete_confirmation": "Ви впевнені, що хочете видалити все?",
+	"description": "Опис",
+	"discuss_frame": "Обговоріть кадр",
+	"discuss_illustration": "Обговоріть ілюстрацію",
+	"editing_item": "Редагування елемента",
+	"how_many_points": "Скільки балів додати:",
+	"illustration": "Ілюстрація",
+	"new_item": "новий предмет",
+	"ok": "в порядку",
+	"quote": "Цитата",
+	"read_a_quote": "Прочитайте цитату",
+	"removal": "видалення",
+	"several": "Кілька",
+	"single": "Неодружений",
+	"starting_digit": "Початкова цифра:",
+	"table": "Таблиця"
+}
