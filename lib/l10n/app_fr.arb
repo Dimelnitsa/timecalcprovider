@@ -1,0 +1,21 @@
+{
+	"add": "Ajouter",
+	"cancel": "annuler",
+	"delete": "Effacer",
+	"delete_confirmation": "Êtes-vous sûr de vouloir tout supprimer ?",
+	"description": "La description",
+	"discuss_frame": "Discuter du cadre",
+	"discuss_illustration": "Discuter de l'illustration",
+	"editing_item": "Modification de l'élément",
+	"how_many_points": "Combien de points ajouter :",
+	"illustration": "illustration",
+	"new_item": "Nouvel article",
+	"ok": "D'accord",
+	"quote": "Citation",
+	"read_a_quote": "Lire une citation",
+	"removal": "Suppression",
+	"several": "plusieurs",
+	"single": "Unique",
+	"starting_digit": "Chiffre de départ :",
+	"table": "Table"
+}
