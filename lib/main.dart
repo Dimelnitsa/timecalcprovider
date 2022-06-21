@@ -47,6 +47,7 @@ class MyApp extends StatelessWidget {
         Locale('es', ''),
         Locale('de', ''),
         Locale('bg', ''),
+        Locale('fr', ''),
       ],
       scrollBehavior: const ConstantScrollBehavior(),
       theme: ThemeData(
