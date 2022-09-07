@@ -212,7 +212,7 @@ class DurationInputTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final duration = context.watch<TimeSetModule>().duration();
+    final duration = context.watch<TimeSetModule>().durationTimeSet();
     final durationController = TextEditingController(text: duration);
 
     return Flexible(

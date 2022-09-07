@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
@@ -60,11 +59,14 @@ class TimeSetModule with ChangeNotifier {
       timeSet.addListNumberChips((await boxNumberChips), numberChips);
 
       timeSet.save();
-      (await boxOfItems).listenable().addListener(() {loadTimeSet(lastOpened!);});
+      (await boxOfItems).listenable().addListener(() {
+        loadTimeSet(lastOpened!);
+      });
     } else {
       await loadTimeSet(lastOpened!);
-      (await boxOfItems).listenable().addListener(() {loadTimeSet(lastOpened!);});
-
+      (await boxOfItems).listenable().addListener(() {
+        loadTimeSet(lastOpened!);
+      });
     }
   }
 
@@ -75,7 +77,7 @@ class TimeSetModule with ChangeNotifier {
 
     timeSet = (await boxTimeSet).get(keyOfTimeSet)!;
     _itemsTimeSet = timeSet.items as List<Item>;
-   numberChips = timeSet.numberChips as List<NumberChipData>;
+    numberChips = timeSet.numberChips as List<NumberChipData>;
     notifyListeners();
   }
 
@@ -90,21 +92,21 @@ class TimeSetModule with ChangeNotifier {
 
     (await boxTimeSet).put(title, _savedTimeSet);
 
-    final _savedListParts = _itemsTimeSet.map((item) => Item.clone(item)).toList();
+    final _savedListParts =
+        _itemsTimeSet.map((item) => Item.clone(item)).toList();
     (await boxOfItems).addAll(_savedListParts);
     _savedTimeSet.addItems((await boxOfItems), _savedListParts);
 
-
-    final _savedListNumberChips = numberChips.map((numberChip)
-    => NumberChipData.clone(numberChip)).toList();
+    final _savedListNumberChips = numberChips
+        .map((numberChip) => NumberChipData.clone(numberChip))
+        .toList();
     (await boxNumberChips).addAll(_savedListNumberChips);
-    _savedTimeSet.addListNumberChips((await boxNumberChips), _savedListNumberChips);
+    _savedTimeSet.addListNumberChips(
+        (await boxNumberChips), _savedListNumberChips);
 
     _savedTimeSet.save();
     await loadTimeSet(title);
   }
-
-
 
   ///Calculation timeset's parameters
   TimeOfDay finishTime() {
@@ -116,7 +118,7 @@ class TimeSetModule with ChangeNotifier {
     return finish;
   }
 
-  String duration() {
+  String durationTimeSet() {
     DateTime _startInDateTime = DateTime(
         0, 1, 1, startTimeOfSet(timeSet).hour, startTimeOfSet(timeSet).minute);
     DateTime _finishInDateTime =
@@ -198,7 +200,6 @@ class TimeSetModule with ChangeNotifier {
     );
   }
 
-
   void addTitle(Item item, String text) {
     item.titleItem = text;
     notifyListeners();
@@ -256,16 +257,19 @@ class TimeSetModule with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> addNumberChipsInHive(int startNumber)async {
-    final numberChipData = NumberChipData(number: startNumber, isSelected: false);
-    final _listNumberChipsInHive = (await boxNumberChips).values.map((numberChip) => numberChip.number).toList();
-    if (!_listNumberChipsInHive.contains(startNumber)){
+  Future<void> addNumberChipsInHive(int startNumber) async {
+    final numberChipData =
+        NumberChipData(number: startNumber, isSelected: false);
+    final _listNumberChipsInHive = (await boxNumberChips)
+        .values
+        .map((numberChip) => numberChip.number)
+        .toList();
+    if (!_listNumberChipsInHive.contains(startNumber)) {
       (await boxNumberChips).add(numberChipData);
       timeSet.addNumberChip((await boxNumberChips), numberChipData);
       timeSet.save();
       notifyListeners();
     }
-
   }
 
   void addNewItem({
@@ -328,12 +332,19 @@ class TimeSetModule with ChangeNotifier {
   }
 
   void calculateStartTimeOfItems(int countOfItems) {
-    DateTime startTimeOfItem = DateTime(
+    //конвертация времени старта позиции в DateTime формат,
+    //чтобы затем его преобразовать в TimeOfDay
+    DateTime startDateTimeOfItem = DateTime(
         0, 1, 1, startTimeOfSet(timeSet).hour, startTimeOfSet(timeSet).minute);
+
+    // расчет и присваивание времени старта каждой позиции из расчета средней продолжительности позиции
     for (int i = 0; i < countOfItems; i++) {
-      var startTimeItem = TimeOfDay.fromDateTime(startTimeOfItem);
+      final startTimeItem = TimeOfDay.fromDateTime(startDateTimeOfItem);
+      final averageDurationOfItem =
+          calculateAverageDurationOfItem(countOfItems);
 
       if (lastOpened != '') {
+        // если расчет делается впервые
         if (timeSet.items != null) {
           timeSet.items![i].startTimeItemHours = startTimeItem.hour;
           timeSet.items![i].startTimeItemMinutes = startTimeItem.minute;
@@ -344,24 +355,25 @@ class TimeSetModule with ChangeNotifier {
         _itemsTimeSet[i].startTimeItemHours = startTimeItem.hour;
         _itemsTimeSet[i].startTimeItemMinutes = startTimeItem.minute;
       }
-      startTimeOfItem =
-          startTimeOfItem.add(calculateDurationOfItem(countOfItems));
+      startDateTimeOfItem = startDateTimeOfItem.add(averageDurationOfItem);
     }
   }
 
-  Duration calculateDurationOfItem(int items) {
-    if (items == 0) {
+  Duration calculateAverageDurationOfItem(int countOfItems) {
+    if (countOfItems == 0) {
       return const Duration(minutes: 0);
     } else {
-      final dur = Duration(
+      final durationTimeSet = Duration(
           hours: timeSet.hoursDuration, minutes: timeSet.minutesDuration);
-      double durParts = dur.inMinutes / items;
-
-      int durPartsMinutes = durParts.round();
-      double durPartsSeconds = (durParts - durPartsMinutes) * 60;
+      double averageDurationOfItemInMinutes =
+          durationTimeSet.inMinutes / countOfItems;
+      int durationOfItemMinutes = averageDurationOfItemInMinutes.round();
+      int durationOfItemSeconds =
+          ((averageDurationOfItemInMinutes - durationOfItemMinutes) * 60)
+              .round();
 
       return Duration(
-          minutes: durPartsMinutes, seconds: durPartsSeconds.round());
+          minutes: durationOfItemMinutes, seconds: durationOfItemSeconds);
     }
   }
 

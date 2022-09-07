@@ -10,8 +10,10 @@ import 'navigation/navigation_routs.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() async {
-  //WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();
+
   await initFlutterHive();
+
   runApp(
     MultiProvider(providers: [
       ChangeNotifierProvider(create: (BuildContext context) => TimeSetModule()),
@@ -19,9 +21,11 @@ void main() async {
       ChangeNotifierProvider(create: (BuildContext context) => DrawScreenModel()),
     ], child: const MyApp()),
   );
+
 }
 
 Future<void> initFlutterHive() async{
+
   await Hive.initFlutter();
 }
 

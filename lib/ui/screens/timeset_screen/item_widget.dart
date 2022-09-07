@@ -150,9 +150,21 @@ class StartTime extends StatelessWidget {
   Widget build(BuildContext context) {
     final startTimeItem = TimeOfDay(
         hour: item.startTimeItemHours, minute: item.startTimeItemMinutes);
-    return Text(
-      startTimeItem.format(context),
-      style: const TextStyle(fontSize: 16),
+    final hoursDurationItemOfTimeSet = item.hoursDuration;
+    final minutesDurationItemOfTimeSet = item.minutesDuration;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          startTimeItem.format(context),
+          style: const TextStyle(fontSize: 16),
+        ),
+        Text(
+          '$hoursDurationItemOfTimeSet:$minutesDurationItemOfTimeSet',
+          style: const TextStyle(fontSize: 12, color: Colors.black38),
+        ),
+      ],
     );
   }
 }
