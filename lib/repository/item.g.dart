@@ -25,8 +25,8 @@ class ItemAdapter extends TypeAdapter<Item> {
       isVerse: fields[7] as bool,
       isTable: fields[8] as bool,
     )
-      ..hoursDuration = fields[2] as int
-      ..minutesDuration = fields[3] as int;
+      ..durationInMinutes = fields[2] as int
+      ..durationInSeconds = fields[3] as int;
   }
 
   @override
@@ -38,9 +38,9 @@ class ItemAdapter extends TypeAdapter<Item> {
       ..writeByte(1)
       ..write(obj.chipsItem)
       ..writeByte(2)
-      ..write(obj.hoursDuration)
+      ..write(obj.durationInMinutes)
       ..writeByte(3)
-      ..write(obj.minutesDuration)
+      ..write(obj.durationInSeconds)
       ..writeByte(4)
       ..write(obj.startTimeItemHours)
       ..writeByte(5)

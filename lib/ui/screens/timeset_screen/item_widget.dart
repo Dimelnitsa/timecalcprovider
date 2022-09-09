@@ -150,10 +150,10 @@ class StartTime extends StatelessWidget {
   Widget build(BuildContext context) {
     final startTimeItem = TimeOfDay(
         hour: item.startTimeItemHours, minute: item.startTimeItemMinutes);
-    final hoursDurationItemOfTimeSet = item.hoursDuration;
-    final minutesDurationItemOfTimeSet = item.minutesDuration;
+    final hoursDurationItemOfTimeSet = item.durationInMinutes;
+    final minutesDurationItemOfTimeSet = item.durationInSeconds;
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(

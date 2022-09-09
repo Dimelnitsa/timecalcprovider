@@ -77,10 +77,8 @@ class DurationItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _itemEdited = context.select((EditItemModel model) => model.itemEdited);
-    final startTimeItem =
-        TimeOfDay(hour: _itemEdited.hoursDuration, minute: _itemEdited.minutesDuration);
     return Text(
-      startTimeItem.format(context),
+      '${_itemEdited.durationInMinutes}:${_itemEdited.durationInSeconds}',
       style: const TextStyle(fontSize: 16),
     );
   }

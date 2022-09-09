@@ -243,16 +243,12 @@ class TimeSetModule with ChangeNotifier {
         isVerse: false,
         isPicture: false,
         isTable: false);
-    // final numberChipData = NumberChipData(number: startNumber, isSelected: false);
-    // (await boxNumberChips).add(numberChipData);
-    // timeSet.addNumberChip((await boxNumberChips), numberChipData);
     await addNumberChipsInHive(startNumber);
-
     (await boxOfItems).add(item);
     timeSet.addItem((await boxOfItems), item);
     timeSet.save();
     _itemsTimeSet = timeSet.items as List<Item>;
-
+    calculateAverageDurationOfItem(_itemsTimeSet.length);
     calculateStartTimeOfItems(_itemsTimeSet.length);
     notifyListeners();
   }
@@ -292,6 +288,7 @@ class TimeSetModule with ChangeNotifier {
     timeSet.save();
     _itemsTimeSet = timeSet.items as List<Item>;
 
+    calculateAverageDurationOfItem(_itemsTimeSet.length);
     calculateStartTimeOfItems(_itemsTimeSet.length);
     notifyListeners();
   }
@@ -309,7 +306,7 @@ class TimeSetModule with ChangeNotifier {
     (await boxOfItems).add(item);
     _itemsTimeSet.insert(itemIndex, item);
     timeSet.save();
-
+    calculateAverageDurationOfItem(_itemsTimeSet.length);
     calculateStartTimeOfItems(_itemsTimeSet.length);
     notifyListeners();
   }
@@ -327,6 +324,7 @@ class TimeSetModule with ChangeNotifier {
     (await boxOfItems).add(item);
     _itemsTimeSet.insert(itemIndex + 1, item);
     timeSet.save();
+    calculateAverageDurationOfItem(_itemsTimeSet.length);
     calculateStartTimeOfItems(_itemsTimeSet.length);
     notifyListeners();
   }
@@ -337,14 +335,14 @@ class TimeSetModule with ChangeNotifier {
     DateTime startDateTimeOfItem = DateTime(
         0, 1, 1, startTimeOfSet(timeSet).hour, startTimeOfSet(timeSet).minute);
 
+    //calculateAverageDurationOfItem(_itemsTimeSet.length);
+
     // расчет и присваивание времени старта каждой позиции из расчета средней продолжительности позиции
     for (int i = 0; i < countOfItems; i++) {
       final startTimeItem = TimeOfDay.fromDateTime(startDateTimeOfItem);
-      final averageDurationOfItem =
-          calculateAverageDurationOfItem(countOfItems);
 
       if (lastOpened != '') {
-        // если расчет делается впервые
+        // если расчет делается не впервые
         if (timeSet.items != null) {
           timeSet.items![i].startTimeItemHours = startTimeItem.hour;
           timeSet.items![i].startTimeItemMinutes = startTimeItem.minute;
@@ -355,27 +353,44 @@ class TimeSetModule with ChangeNotifier {
         _itemsTimeSet[i].startTimeItemHours = startTimeItem.hour;
         _itemsTimeSet[i].startTimeItemMinutes = startTimeItem.minute;
       }
-      startDateTimeOfItem = startDateTimeOfItem.add(averageDurationOfItem);
+      //вычисление и изменение времени старта следующего пункта
+      final durationOfItemInMinutes = timeSet.items![i].durationInMinutes;
+      final durationOfItemInSeconds = timeSet.items![i].durationInSeconds;
+      final durationOfItem = Duration(minutes: durationOfItemInMinutes, seconds: durationOfItemInSeconds);
+      //startDateTimeOfItem = startDateTimeOfItem.add(averageDurationOfItem);
+      startDateTimeOfItem = startDateTimeOfItem.add(durationOfItem);
     }
   }
 
-  Duration calculateAverageDurationOfItem(int countOfItems) {
-    if (countOfItems == 0) {
-      return const Duration(minutes: 0);
-    } else {
+  void calculateAverageDurationOfItem(int countOfItems) {
       final durationTimeSet = Duration(
           hours: timeSet.hoursDuration, minutes: timeSet.minutesDuration);
       double averageDurationOfItemInMinutes =
           durationTimeSet.inMinutes / countOfItems;
-      int durationOfItemMinutes = averageDurationOfItemInMinutes.round();
+      int durationOfItemMinutes = averageDurationOfItemInMinutes.floor();
       int durationOfItemSeconds =
           ((averageDurationOfItemInMinutes - durationOfItemMinutes) * 60)
               .round();
+    saveAverageDurationOfItem(countOfItems, durationOfItemMinutes, durationOfItemSeconds);
+  }
 
-      return Duration(
-          minutes: durationOfItemMinutes, seconds: durationOfItemSeconds);
+  void saveAverageDurationOfItem(int countOfItems, int durationOfItemMinutes,int durationOfItemSeconds ){
+    for (int i = 0; i < countOfItems; i++) {
+      if (lastOpened != '') {
+        // если расчет делается не впервые
+        if (timeSet.items != null) {
+          timeSet.items![i].durationInMinutes = durationOfItemMinutes;
+          timeSet.items![i].durationInSeconds = durationOfItemSeconds;
+          timeSet.save();
+          timeSet.items![i].save();
+        }
+      } else {
+        _itemsTimeSet[i].durationInMinutes = durationOfItemMinutes;
+        _itemsTimeSet[i].durationInSeconds = durationOfItemSeconds;
+      }
     }
   }
+
 
   void clearAllList(BuildContext context) async {
     _itemsTimeSet.clear();
@@ -398,8 +413,9 @@ class TimeSetModule with ChangeNotifier {
 
   void deleteItemFromList(int keyOfTimeSet) async {
     timeSet.items!.deleteFromHive(keyOfTimeSet);
-    notifyListeners();
+    calculateAverageDurationOfItem(_itemsTimeSet.length);
     calculateStartTimeOfItems(_itemsTimeSet.length);
+    notifyListeners();
   }
 
   void changeIsPicture(item) {

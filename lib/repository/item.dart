@@ -11,9 +11,9 @@ class Item extends HiveObject {
   List<String>? chipsItem = [];
 
   @HiveField(2)
-  int hoursDuration = 0;
+  int durationInMinutes = 0;
   @HiveField(3)
-  int minutesDuration = 0;
+  int durationInSeconds = 0;
 
   @HiveField(4)
   int startTimeItemHours; // start time of item in hours
