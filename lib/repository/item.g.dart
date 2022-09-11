@@ -21,10 +21,12 @@ class ItemAdapter extends TypeAdapter<Item> {
       chipsItem: (fields[1] as List?)?.cast<String>(),
       startTimeItemHours: fields[4] as int,
       startTimeItemMinutes: fields[5] as int,
+      startTimeItemSeconds: fields[10] as int,
       isPicture: fields[6] as bool,
       isVerse: fields[7] as bool,
       isTable: fields[8] as bool,
     )
+      ..durationHours = fields[9] as int
       ..durationInMinutes = fields[2] as int
       ..durationInSeconds = fields[3] as int;
   }
@@ -32,11 +34,13 @@ class ItemAdapter extends TypeAdapter<Item> {
   @override
   void write(BinaryWriter writer, Item obj) {
     writer
-      ..writeByte(9)
+      ..writeByte(11)
       ..writeByte(0)
       ..write(obj.titleItem)
       ..writeByte(1)
       ..write(obj.chipsItem)
+      ..writeByte(9)
+      ..write(obj.durationHours)
       ..writeByte(2)
       ..write(obj.durationInMinutes)
       ..writeByte(3)
@@ -45,6 +49,8 @@ class ItemAdapter extends TypeAdapter<Item> {
       ..write(obj.startTimeItemHours)
       ..writeByte(5)
       ..write(obj.startTimeItemMinutes)
+      ..writeByte(10)
+      ..write(obj.startTimeItemSeconds)
       ..writeByte(6)
       ..write(obj.isPicture)
       ..writeByte(7)

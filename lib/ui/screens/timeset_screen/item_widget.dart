@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:timecalcprovider/repository/item.dart';
 import 'timeset_model.dart';
@@ -148,20 +149,27 @@ class StartTime extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final startTimeItem = TimeOfDay(
-        hour: item.startTimeItemHours, minute: item.startTimeItemMinutes);
-    final hoursDurationItemOfTimeSet = item.durationInMinutes;
-    final minutesDurationItemOfTimeSet = item.durationInSeconds;
+    // final startTimeItem = TimeOfDay(
+    //     hour: item.startTimeItemHours, minute: item.startTimeItemMinutes, );
+    final startTime = DateTime(0, 0, 0, item.startTimeItemHours, item.startTimeItemMinutes);
+    String formattedDate = DateFormat('HH:mm:ss').format(startTime);
+    final durationOfItemInHours = item.durationHours;
+    final durationOfItemInMinutes = item.durationInMinutes;
+    final durationOfItemInSeconds = item.durationInSeconds;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
+        // Text(
+        //   startTimeItem.format(context),
+        //   style: const TextStyle(fontSize: 16),
+        // ),
         Text(
-          startTimeItem.format(context),
+          formattedDate,
           style: const TextStyle(fontSize: 16),
         ),
         Text(
-          '$hoursDurationItemOfTimeSet:$minutesDurationItemOfTimeSet',
+          '$durationOfItemInHours:$durationOfItemInMinutes:$durationOfItemInSeconds',
           style: const TextStyle(fontSize: 12, color: Colors.black38),
         ),
       ],

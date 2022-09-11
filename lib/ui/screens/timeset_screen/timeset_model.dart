@@ -240,6 +240,7 @@ class TimeSetModule with ChangeNotifier {
         chipsItem: <String>[startNumber.toString()],
         startTimeItemHours: 0,
         startTimeItemMinutes: 0,
+        startTimeItemSeconds: 0,
         isVerse: false,
         isPicture: false,
         isTable: false);
@@ -280,6 +281,7 @@ class TimeSetModule with ChangeNotifier {
         chipsItem: chipsItem,
         startTimeItemHours: 0,
         startTimeItemMinutes: 0,
+        startTimeItemSeconds: 0,
         isVerse: isVerse,
         isPicture: isPicture,
         isTable: isTable);
@@ -299,6 +301,7 @@ class TimeSetModule with ChangeNotifier {
         chipsItem: [],
         startTimeItemHours: 0,
         startTimeItemMinutes: 0,
+        startTimeItemSeconds: 0,
         isVerse: false,
         isPicture: false,
         isTable: false);
@@ -317,6 +320,7 @@ class TimeSetModule with ChangeNotifier {
         chipsItem: [],
         startTimeItemHours: 0,
         startTimeItemMinutes: 0,
+        startTimeItemSeconds: 0,
         isVerse: false,
         isPicture: false,
         isTable: false);
@@ -367,24 +371,27 @@ class TimeSetModule with ChangeNotifier {
           hours: timeSet.hoursDuration, minutes: timeSet.minutesDuration);
       double averageDurationOfItemInMinutes =
           durationTimeSet.inMinutes / countOfItems;
+      int durationOfItemHours = (averageDurationOfItemInMinutes/60).floor();
       int durationOfItemMinutes = averageDurationOfItemInMinutes.floor();
       int durationOfItemSeconds =
           ((averageDurationOfItemInMinutes - durationOfItemMinutes) * 60)
               .round();
-    saveAverageDurationOfItem(countOfItems, durationOfItemMinutes, durationOfItemSeconds);
+    saveAverageDurationOfItem(countOfItems,durationOfItemHours, durationOfItemMinutes, durationOfItemSeconds);
   }
 
-  void saveAverageDurationOfItem(int countOfItems, int durationOfItemMinutes,int durationOfItemSeconds ){
+  void saveAverageDurationOfItem(int countOfItems, int durationOfItemHours, int durationOfItemMinutes,int durationOfItemSeconds ){
     for (int i = 0; i < countOfItems; i++) {
       if (lastOpened != '') {
         // если расчет делается не впервые
         if (timeSet.items != null) {
+          timeSet.items![i].durationHours = durationOfItemHours;
           timeSet.items![i].durationInMinutes = durationOfItemMinutes;
           timeSet.items![i].durationInSeconds = durationOfItemSeconds;
           timeSet.save();
           timeSet.items![i].save();
         }
       } else {
+        _itemsTimeSet[i].durationHours = durationOfItemHours;
         _itemsTimeSet[i].durationInMinutes = durationOfItemMinutes;
         _itemsTimeSet[i].durationInSeconds = durationOfItemSeconds;
       }

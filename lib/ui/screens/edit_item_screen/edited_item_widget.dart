@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'edit_item_model.dart';
 
 class EditedItemWidget extends StatelessWidget {
   const EditedItemWidget({
     Key? key,
-  })  : super(key: key);
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-   final _itemEdited = context.watch<EditItemModel>().itemEdited;
+    final _itemEdited = context.watch<EditItemModel>().itemEdited;
     final _isVerse = context.select((EditItemModel value) => value.isVerse);
     final _isPicture = context.select((EditItemModel value) => value.isPicture);
     final _isTable = context.select((EditItemModel value) => value.isTable);
@@ -60,10 +61,14 @@ class StartTime extends StatelessWidget {
   Widget build(BuildContext context) {
     final _itemEdited = context.read<EditItemModel>().itemEdited;
 
-    final startTimeItem = TimeOfDay(
-        hour: _itemEdited.startTimeItemHours, minute: _itemEdited.startTimeItemMinutes);
+    // final startTimeItem = TimeOfDay(
+    //     hour: _itemEdited.startTimeItemHours,
+    //     minute: _itemEdited.startTimeItemMinutes);
+    final startTime = DateTime(0, 0, 0, _itemEdited.startTimeItemHours,
+        _itemEdited.startTimeItemMinutes, _itemEdited.startTimeItemSeconds);
+    String formattedDate = DateFormat('HH:mm:ss').format(startTime);
     return Text(
-      startTimeItem.format(context),
+      formattedDate,
       style: const TextStyle(fontSize: 16),
     );
   }
@@ -76,9 +81,10 @@ class DurationItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _itemEdited = context.select((EditItemModel model) => model.itemEdited);
+    final _itemEdited =
+        context.select((EditItemModel model) => model.itemEdited);
     return Text(
-      '${_itemEdited.durationInMinutes}:${_itemEdited.durationInSeconds}',
+      '${_itemEdited.durationHours}:${_itemEdited.durationInMinutes}:${_itemEdited.durationInSeconds}',
       style: const TextStyle(fontSize: 16),
     );
   }

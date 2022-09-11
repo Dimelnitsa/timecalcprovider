@@ -10,15 +10,20 @@ class Item extends HiveObject {
   @HiveField(1)
   List<String>? chipsItem = [];
 
+  @HiveField(9)
+  int durationHours = 0;
+
   @HiveField(2)
   int durationInMinutes = 0;
   @HiveField(3)
   int durationInSeconds = 0;
 
   @HiveField(4)
-  int startTimeItemHours; // start time of item in hours
+  int startTimeItemHours; // hours of item's start time
   @HiveField(5)
-  int startTimeItemMinutes; // start time of item in minutes
+  int startTimeItemMinutes; // minutes of item's start time
+  @HiveField(10)
+  int startTimeItemSeconds; // seconds of item's start time
 
   @HiveField(6)
   bool isPicture; // need to discuss picture
@@ -32,6 +37,7 @@ class Item extends HiveObject {
     this.chipsItem,
     required this.startTimeItemHours,
     required this.startTimeItemMinutes,
+    required this.startTimeItemSeconds,
     this.isPicture = false,
     this.isVerse = false,
     this.isTable = false,
@@ -43,6 +49,7 @@ class Item extends HiveObject {
         chipsItem: item.chipsItem,
         startTimeItemHours: item.startTimeItemHours,
         startTimeItemMinutes: item.startTimeItemMinutes,
+        startTimeItemSeconds: item.startTimeItemSeconds,
         isPicture: item.isPicture = false,
         isVerse: item.isVerse = false,
         isTable: item.isTable = false);
