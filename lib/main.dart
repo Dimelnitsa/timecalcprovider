@@ -36,22 +36,22 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      localizationsDelegates: const [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate
-      ],
-      supportedLocales: const [
-        Locale('ru', ''),
-        Locale('ukr', ''),
-        Locale('bel', ''),
-        Locale('pl', ''),
-        Locale('eng', ''),
-        Locale('deu', ''),
-        Locale('isl', ''),
-        Locale('chi', ''),
-        Locale('jpn', ''),
-      ],
+      // localizationsDelegates: const [
+      //   GlobalMaterialLocalizations.delegate,
+      //   GlobalWidgetsLocalizations.delegate,
+      //   GlobalCupertinoLocalizations.delegate
+      // ],
+      // supportedLocales: const [
+      //   Locale('ru', ''),
+      //   Locale('ukr', ''),
+      //   Locale('bel', ''),
+      //   Locale('pl', ''),
+      //   Locale('eng', ''),
+      //   Locale('deu', ''),
+      //   Locale('isl', ''),
+      //   Locale('chi', ''),
+      //   Locale('jpn', ''),
+      // ],
       title: 'Time Calculator',
       localizationsDelegates: const [
         AppLocalizations.delegate,
@@ -59,7 +59,7 @@ class MyApp extends StatelessWidget {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      supportedLocales: L10n.all,
+     supportedLocales: L10n.all,
       scrollBehavior: const ConstantScrollBehavior(),
       theme: ThemeData(
         primarySwatch: Colors.blueGrey,
