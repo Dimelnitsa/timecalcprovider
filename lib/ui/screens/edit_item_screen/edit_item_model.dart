@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:timecalcprovider/domain/data_provider/hive_manager.dart';
 import 'package:timecalcprovider/repository/number_chips_data.dart';
-import 'package:timecalcprovider/repository/timeset_in_hive.dart';
+import 'package:timecalcprovider/repository/timeset.dart';
 import '../../../repository/item.dart';
 import '../../../repository/text_choice_chip_data.dart';
 
 class EditItemModel extends ChangeNotifier {
   Item itemEdited;
-  TimeSetInHive timeSet;
+  TimeSet timeSet;
   String? titleItem;
   bool isVerse = false;
   bool isPicture = false;

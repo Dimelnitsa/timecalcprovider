@@ -6,17 +6,20 @@ import 'package:timecalcprovider/domain/data_provider/hive_manager.dart';
 import 'package:timecalcprovider/repository/counter_model.dart';
 import 'package:timecalcprovider/repository/number_chips_data.dart';
 import '../../../repository/item.dart';
-import '../../../repository/timeset_in_hive.dart';
+import '../../../repository/timeset.dart';
 import '../dialogs_screen/numeral_item_dialog.dart';
 
 class TimeSetModule with ChangeNotifier {
-  var timeSet = TimeSetInHive(
+  var timeSet = TimeSet(
       title: 'Новый',
       startHours: TimeOfDay.now().hour.toInt(),
       startMinutes: TimeOfDay.now().minute.toInt(),
       dateTimeSaved: DateTime.now());
+///TODO setup TimeSetService
+ //var timeSet= TimeSetService().timeSet;
 
-  late final Future<Box<TimeSetInHive>> boxTimeSet;
+
+  late final Future<Box<TimeSet>> boxTimeSet;
   late final Future<Box<Item>> boxOfItems;
   late final Future<Box<NumberChipData>> boxNumberChips;
   List<Item> _itemsTimeSet = [];
@@ -27,7 +30,7 @@ class TimeSetModule with ChangeNotifier {
 
   List<NumberChipData> numberChips = [];
 
-  TimeOfDay startTimeOfSet(TimeSetInHive timeSetInHive) => TimeOfDay(
+  TimeOfDay startTimeOfSet(TimeSet timeSetInHive) => TimeOfDay(
       hour: timeSetInHive.startHours, minute: timeSetInHive.startMinutes);
 
   TimeSetModule() {
@@ -82,7 +85,7 @@ class TimeSetModule with ChangeNotifier {
   }
 
   Future<void> saveNewTimeSet(String title) async {
-    final _savedTimeSet = TimeSetInHive(
+    final _savedTimeSet = TimeSet(
         title: title,
         startHours: timeSet.startHours,
         startMinutes: timeSet.startMinutes,

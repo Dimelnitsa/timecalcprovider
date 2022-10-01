@@ -2,7 +2,7 @@ import 'package:hive/hive.dart';
 import 'package:timecalcprovider/repository/number_chips_data.dart';
 import '../../repository/item.dart';
 import '../../repository/text_choice_chip_data.dart';
-import '../../repository/timeset_in_hive.dart';
+import '../../repository/timeset.dart';
 
 class HiveManager{
 
@@ -36,7 +36,7 @@ class HiveManager{
   //   return Hive.openBox<List>('list_of_items_box');
   // }
 
-  Future<Box<TimeSetInHive>> openTimeSetBox() {
+  Future<Box<TimeSet>> openTimeSetBox() {
     return _openBox(nameBox: 'timeset_box');
   }
 

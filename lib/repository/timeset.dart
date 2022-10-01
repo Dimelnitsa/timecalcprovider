@@ -1,12 +1,12 @@
-import 'package:flutter/material.dart';
+
 import 'package:hive/hive.dart';
 import 'item.dart';
 import 'number_chips_data.dart';
 
-part 'timeset_in_hive.g.dart';
+part 'timeset.g.dart';
 
 @HiveType(typeId: 0)
-class TimeSetInHive extends HiveObject {
+class TimeSet extends HiveObject {
   @HiveField(0)
   String title;
 
@@ -37,7 +37,7 @@ class TimeSetInHive extends HiveObject {
   @HiveField(9)
   HiveList<NumberChipData>? numberChips;
 
-  TimeSetInHive(
+  TimeSet(
       {this.title = 'noname',
       required this.startHours,
       required this.startMinutes,
@@ -45,9 +45,6 @@ class TimeSetInHive extends HiveObject {
       this.minutesDuration = 0,
       required this.dateTimeSaved});
 
-  TimeOfDay start() {
-    return TimeOfDay(hour: startHours, minute: startMinutes);
-  }
 
   void addItems(Box<Item> box, List<Item> listOfItems) {
     items ??= HiveList(box);

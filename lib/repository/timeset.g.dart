@@ -1,22 +1,22 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'timeset_in_hive.dart';
+part of 'timeset.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class TimeSetInHiveAdapter extends TypeAdapter<TimeSetInHive> {
+class TimeSetInHiveAdapter extends TypeAdapter<TimeSet> {
   @override
   final int typeId = 0;
 
   @override
-  TimeSetInHive read(BinaryReader reader) {
+  TimeSet read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return TimeSetInHive(
+    return TimeSet(
       title: fields[0] as String,
       startHours: fields[6] as int,
       startMinutes: fields[7] as int,
@@ -29,7 +29,7 @@ class TimeSetInHiveAdapter extends TypeAdapter<TimeSetInHive> {
   }
 
   @override
-  void write(BinaryWriter writer, TimeSetInHive obj) {
+  void write(BinaryWriter writer, TimeSet obj) {
     writer
       ..writeByte(8)
       ..writeByte(0)

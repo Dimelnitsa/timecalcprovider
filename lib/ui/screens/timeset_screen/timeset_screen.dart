@@ -31,7 +31,7 @@ class _TimeSetScreenState extends State<TimeSetScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(_timeSet.title),
-        actions: ActionIconButtons(context),
+        actions: ListOfActionButtons(context),
       ),
       drawer: const DrawerScreen(),
       body: ListOfItems(),
@@ -41,7 +41,7 @@ class _TimeSetScreenState extends State<TimeSetScreen> {
   }
 }
 
-List<Widget> ActionIconButtons(BuildContext context){
+List<Widget> ListOfActionButtons(BuildContext context){
   return [
     IconButton(
         onPressed: () {

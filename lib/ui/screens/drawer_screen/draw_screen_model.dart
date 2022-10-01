@@ -1,15 +1,15 @@
 import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:timecalcprovider/repository/timeset_in_hive.dart';
+import 'package:timecalcprovider/repository/timeset.dart';
 import '../../../domain/data_provider/hive_manager.dart';
 
 class DrawScreenModel extends ChangeNotifier {
-  var _timeSets = <TimeSetInHive>[];
-  late final Future<Box<TimeSetInHive>> _timeSetBox;
+  var _timeSets = <TimeSet>[];
+  late final Future<Box<TimeSet>> _timeSetBox;
   ValueListenable<Object>? _timeSetBoxListenable;
 
 
-  List<TimeSetInHive> get timeSets => _timeSets.toList();
+  List<TimeSet> get timeSets => _timeSets.toList();
 
   DrawScreenModel() {
     _setup();
