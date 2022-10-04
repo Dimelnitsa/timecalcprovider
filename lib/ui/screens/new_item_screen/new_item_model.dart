@@ -3,7 +3,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:timecalcprovider/repository/item.dart';
 import '../../../repository/text_choice_chip_data.dart';
-import '../timeset_screen/timeset_model.dart';
+import '../timeset_screen/time_set_model.dart';
 
 
 class NewItemModel extends ChangeNotifier {

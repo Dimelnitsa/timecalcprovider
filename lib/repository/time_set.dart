@@ -38,7 +38,7 @@ class TimeSet extends HiveObject {
   HiveList<NumberChipData>? numberChips;
 
   TimeSet(
-      {this.title = 'noname',
+      {this.title = 'name',
       required this.startHours,
       required this.startMinutes,
       this.hoursDuration = 1,

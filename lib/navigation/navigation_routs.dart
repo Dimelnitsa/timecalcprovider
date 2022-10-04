@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 import '../ui/screens/new_item_screen/new_item_screen.dart';
-import '../ui/screens/timeset_screen/timeset_screen.dart';
+import '../ui/screens/timeset_screen/time_set_screen.dart';
 import '../repository/settings.dart';
 
 

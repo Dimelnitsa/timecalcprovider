@@ -2,7 +2,7 @@ import 'package:hive/hive.dart';
 import 'package:timecalcprovider/repository/number_chips_data.dart';
 import '../../repository/item.dart';
 import '../../repository/text_choice_chip_data.dart';
-import '../../repository/timeset.dart';
+import '../../repository/time_set.dart';
 
 class HiveManager{
 

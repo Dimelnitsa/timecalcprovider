@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'widgets/list_switchers_widget.dart';
 import '../../../repository/item.dart';
-import '../timeset_screen/timeset_model.dart';
+import '../timeset_screen/time_set_model.dart';
 import 'edit_item_model.dart';
 import 'edited_item_widget.dart';
 import 'widgets/text_choice_chips_widget.dart';

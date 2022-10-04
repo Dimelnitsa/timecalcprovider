@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 import '../../edit_item_screen/edit_item_screen.dart';
-import '../timeset_model.dart';
+import '../time_set_model.dart';
 import 'item_widget.dart';
 import 'time_setup_panel.dart';
 

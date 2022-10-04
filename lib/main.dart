@@ -4,7 +4,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:timecalcprovider/l10n/l10n.dart';
 import 'package:timecalcprovider/repository/counter_model.dart';
-import 'ui/screens/timeset_screen/timeset_model.dart';
+import 'ui/screens/timeset_screen/time_set_model.dart';
 import 'ui/screens/drawer_screen/draw_screen_model.dart';
 import 'navigation/navigation_routs.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';

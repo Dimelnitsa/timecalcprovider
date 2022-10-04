@@ -5,7 +5,7 @@ import '../dialogs_screen/save_set_dialog.dart';
 import '../drawer_screen/drawer_screen.dart';
 import 'widgets/fab_menu.dart';
 import 'widgets/list_of_items.dart';
-import 'timeset_model.dart';
+import 'time_set_model.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TimeSetScreen extends StatefulWidget {

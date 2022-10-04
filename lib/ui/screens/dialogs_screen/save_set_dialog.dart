@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../timeset_screen/timeset_model.dart';
+import '../timeset_screen/time_set_model.dart';
 
 class SaveSetDialog extends StatefulWidget {
   const SaveSetDialog({Key? key}) : super(key: key);
@@ -30,7 +30,7 @@ class _SaveSetDialogState extends State<SaveSetDialog> {
         ),
         TextButton(
           onPressed: () {
-            context.read<TimeSetModule>().saveNewTimeSet(_controller.text);
+           // context.read<TimeSetModule>().saveNewTimeSet(_controller.text);
             Navigator.pop(context);
           },
           child: const Text('Ok'),

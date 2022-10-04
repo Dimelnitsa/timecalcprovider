@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:timecalcprovider/repository/item.dart';
-import '../timeset_model.dart';
+import '../time_set_model.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ItemWidget extends StatelessWidget {

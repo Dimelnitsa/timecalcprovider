@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:timecalcprovider/repository/counter_model.dart';
-import '../timeset_screen/timeset_model.dart';
+import '../timeset_screen/time_set_model.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class NumeralItemDialog extends StatefulWidget {

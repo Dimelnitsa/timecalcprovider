@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'timeset.dart';
+part of 'time_set.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator

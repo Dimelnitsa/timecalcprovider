@@ -4,7 +4,7 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import '../../../../navigation/navigation_routs.dart';
-import '../timeset_model.dart';
+import '../time_set_model.dart';
 
 class MenuFab extends StatelessWidget {
   const MenuFab({Key? key}) : super(key: key);

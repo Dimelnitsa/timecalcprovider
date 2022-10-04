@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:timecalcprovider/repository/timeset.dart';
+import 'package:timecalcprovider/repository/time_set.dart';
 import '../../../domain/data_provider/hive_manager.dart';
 
 class DrawScreenModel extends ChangeNotifier {
