@@ -31,8 +31,9 @@ class TimeSetService {
     _lastSet = pref.getString('last_opened')!;
   }
 
-  Future<void> initialization() async {
-    _timeSet = await _timeSetDataProvider.loadTimeSetFromHive(_lastSet);
+  Future<void> initializationTimeSet() async {
+   await _timeSetDataProvider.loadTimeSetFromHive(_lastSet);
+    _timeSet = await _timeSetDataProvider.timeSetFromHive;
   }
 
   Future<void> closeHive() async {

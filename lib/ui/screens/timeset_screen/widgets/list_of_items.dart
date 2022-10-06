@@ -6,8 +6,6 @@ import '../time_set_model.dart';
 import 'item_widget.dart';
 import 'time_setup_panel.dart';
 
-
-
 class ListOfItems extends StatelessWidget {
   const ListOfItems({
     Key? key,
@@ -15,13 +13,14 @@ class ListOfItems extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final items = context.read<TimeSetModule>().itemsTimeSet();
     return NotificationListener<UserScrollNotification>(
       onNotification: (notification) {
         if (notification.direction == ScrollDirection.forward) {
           bool visibility = true;
           context.read<TimeSetModule>().changeFabVisible(visibility);
         } else if (notification.direction == ScrollDirection.reverse &&
-            context.read<TimeSetModule>().itemsTimeSet.isNotEmpty) {
+            items.isNotEmpty) {
           bool visibility = false;
           context.read<TimeSetModule>().changeFabVisible(visibility);
         }
@@ -43,8 +42,6 @@ class ListOfItems extends StatelessWidget {
   }
 }
 
-
-
 class ListOfItemWidgets extends StatefulWidget {
   const ListOfItemWidgets({Key? key}) : super(key: key);
 
@@ -55,7 +52,7 @@ class ListOfItemWidgets extends StatefulWidget {
 class _ListOfItemWidgetsState extends State<ListOfItemWidgets> {
   @override
   Widget build(BuildContext context) {
-    final _listOfItems = context.watch<TimeSetModule>().itemsTimeSet;
+    final _listOfItems = context.watch<TimeSetModule>().itemsTimeSet();
 
     return SliverList(
       delegate: SliverChildBuilderDelegate(
@@ -72,9 +69,11 @@ class _ListOfItemWidgetsState extends State<ListOfItemWidgets> {
                 },
                 child: ItemWidget(item: item, index: index)),
             onTap: () {
-             // context.read<TimeSetModule>().showEditItemDialog(context, item);
-              Navigator.push(context, MaterialPageRoute(
-                  builder: (context) => EditItemScreen(item: item)));
+              // context.read<TimeSetModule>().showEditItemDialog(context, item);
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => EditItemScreen(item: item)));
             },
           );
         },
@@ -82,5 +81,4 @@ class _ListOfItemWidgetsState extends State<ListOfItemWidgets> {
       ),
     );
   }
-
 }

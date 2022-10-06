@@ -21,7 +21,6 @@ class TimeSetupPanel extends StatelessWidget {
   }
 }
 
-///TODO format to DateTime
 class StartTimeSet extends StatelessWidget {
   const StartTimeSet({
     Key? key,

@@ -2,23 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:timecalcprovider/repository/counter_model.dart';
 import '../../../repository/item.dart';
+import '../../../services/item_service.dart';
 import '../../../services/time_set_service.dart';
 import '../dialogs_screen/numeral_item_dialog.dart';
 
 class TimeSetModule with ChangeNotifier {
-  // var timeSet = TimeSet(
-  //     title: 'Новый',
-  //     startHours: TimeOfDay.now().hour.toInt(),
-  //     startMinutes: TimeOfDay.now().minute.toInt(),
-  //     dateTimeSaved: DateTime.now());
 
   final _timeSetService = TimeSetService();
+  final _itemListService = ItemListService();
 
   // late final Future<Box<TimeSet>> boxTimeSet;
   // late final Future<Box<Item>> boxOfItems;
   // late final Future<Box<NumberChipData>> boxNumberChips;
-  List<Item> _itemsTimeSet = [];
-  List<Item> get itemsTimeSet => _itemsTimeSet.toList();
+
+  //List<Item> get itemsTimeSet => _itemsTimeSet.toList();
 
   bool _isFabVisible = true;
   // String? lastOpened = '';
@@ -31,8 +28,12 @@ class TimeSetModule with ChangeNotifier {
 
   ///Hive.
   Future<void> _setup() async {
-    await _timeSetService.initialization();
+    await _timeSetService.initializationTimeSet();
+    await _itemListService.initializationItemsListOfTimeSet(_timeSetService.timeSet);
+    notifyListeners();
   }
+
+  List<Item> itemsTimeSet() => _itemListService.items ;
 
   // Future<void> _readCurrentTimeSetFromHive() async {
   //   final pref = await SharedPreferences.getInstance();
@@ -400,7 +401,7 @@ class TimeSetModule with ChangeNotifier {
   // }
 
   void clearAllList(BuildContext context) async {
-    _itemsTimeSet.clear();
+   // _itemsTimeSet.clear();
     // numberChips.clear();
     context.read<CounterModel>().startNumber = 1;
     // (await boxListOfItems).delete(timeSet.title);
