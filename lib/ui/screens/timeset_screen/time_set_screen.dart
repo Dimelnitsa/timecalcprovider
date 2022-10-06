@@ -26,11 +26,11 @@ class _TimeSetScreenState extends State<TimeSetScreen> {
   @override
   Widget build(BuildContext context) {
     final fabVisible = context.watch<TimeSetModule>().isFabVisible;
-    final _timeSet = context.watch<TimeSetModule>().timeSet;
+    final _titleTimeSet = context.watch<TimeSetModule>().titleTimeSet();
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(_timeSet.title),
+        title: Text(_titleTimeSet),
         actions: ListOfActionButtons(context),
       ),
       drawer: const DrawerScreen(),

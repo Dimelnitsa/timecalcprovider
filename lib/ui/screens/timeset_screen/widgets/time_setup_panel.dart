@@ -13,23 +13,23 @@ class TimeSetupPanel extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       mainAxisSize: MainAxisSize.max,
       children: const [
-        StartInputTextField(),
+        StartTimeSet(),
         DurationInputTextField(),
-        FinishInputTextField()
+        FinishTimeSet()
       ],
     );
   }
 }
 
 ///TODO format to DateTime
-class StartInputTextField extends StatelessWidget {
-  const StartInputTextField({
+class StartTimeSet extends StatelessWidget {
+  const StartTimeSet({
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final startSet = context.watch<TimeSetModule>().startSet();
+    final startSet = context.watch<TimeSetModule>().startSet().format(context);
 
     return Flexible(
       flex: 1,
@@ -91,14 +91,14 @@ class DurationInputTextField extends StatelessWidget {
   }
 }
 
-class FinishInputTextField extends StatelessWidget {
-  const FinishInputTextField({
+class FinishTimeSet extends StatelessWidget {
+  const FinishTimeSet({
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final finishSet = context.watch<TimeSetModule>().finishSet();
+    final finishSet = context.watch<TimeSetModule>().finishSet().format(context);
     return Flexible(
       flex: 1,
       child: Padding(

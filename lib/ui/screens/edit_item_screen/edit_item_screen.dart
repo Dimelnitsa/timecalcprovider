@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../../repository/time_set.dart';
 import 'widgets/list_switchers_widget.dart';
 import '../../../repository/item.dart';
 import '../timeset_screen/time_set_model.dart';
@@ -16,7 +17,12 @@ class EditItemScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _timeSet = context.read<TimeSetModule>().timeSet;
+    ///TODO change _timeSet to real variable
+    final _timeSet = TimeSet(
+        title: 'Новый',
+        startHours: TimeOfDay.now().hour.toInt(),
+        startMinutes: TimeOfDay.now().minute.toInt(),
+        dateTimeSaved: DateTime.now());;
     return ChangeNotifierProvider(
       create: (context) => EditItemModel(itemEdited: item, timeSet: _timeSet),
       child: const EditItemBody(),

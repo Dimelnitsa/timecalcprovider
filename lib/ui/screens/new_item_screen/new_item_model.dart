@@ -96,16 +96,16 @@ class NewItemModel extends ChangeNotifier {
     numberChips.add(counter ++);
     notifyListeners();}
 
-  void saveItem (BuildContext context){
-    context.read<TimeSetModule>().addNewItem(
-        titleItem: titleItem,
-        chipsItem: itemChips,
-        isVerse: isVerse,
-        isPicture: isPicture,
-        isTable: isTable);
+  // void saveItem (BuildContext context){
+  //   context.read<TimeSetModule>().addNewItem(
+  //       titleItem: titleItem,
+  //       chipsItem: itemChips,
+  //       isVerse: isVerse,
+  //       isPicture: isPicture,
+  //       isTable: isTable);
 
-    Navigator.pop(context);
-  }
+  //   Navigator.pop(context);
+  // }
 
 
 }

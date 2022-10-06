@@ -1,47 +1,38 @@
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:timecalcprovider/domain/data_provider/hive_manager.dart';
 import 'package:timecalcprovider/repository/counter_model.dart';
-import 'package:timecalcprovider/repository/number_chips_data.dart';
 import '../../../repository/item.dart';
-import '../../../repository/time_set.dart';
 import '../../../services/time_set_service.dart';
 import '../dialogs_screen/numeral_item_dialog.dart';
 
 class TimeSetModule with ChangeNotifier {
-  var timeSet = TimeSet(
-      title: 'Новый',
-      startHours: TimeOfDay.now().hour.toInt(),
-      startMinutes: TimeOfDay.now().minute.toInt(),
-      dateTimeSaved: DateTime.now());
-///TODO setup TimeSetService
- final _timeSetService = TimeSetService();
+  // var timeSet = TimeSet(
+  //     title: 'Новый',
+  //     startHours: TimeOfDay.now().hour.toInt(),
+  //     startMinutes: TimeOfDay.now().minute.toInt(),
+  //     dateTimeSaved: DateTime.now());
 
+  final _timeSetService = TimeSetService();
 
- // late final Future<Box<TimeSet>> boxTimeSet;
- // late final Future<Box<Item>> boxOfItems;
- // late final Future<Box<NumberChipData>> boxNumberChips;
+  // late final Future<Box<TimeSet>> boxTimeSet;
+  // late final Future<Box<Item>> boxOfItems;
+  // late final Future<Box<NumberChipData>> boxNumberChips;
   List<Item> _itemsTimeSet = [];
   List<Item> get itemsTimeSet => _itemsTimeSet.toList();
 
   bool _isFabVisible = true;
- // String? lastOpened = '';
+  // String? lastOpened = '';
 
- // List<NumberChipData> numberChips = [];
-
-
+  // List<NumberChipData> numberChips = [];
 
   TimeSetModule() {
-  //  _setup();
-    _timeSetService.initialization();
+    _setup();
   }
 
   ///Hive.
-  // Future<void> _setup() async {
-  //   await _readCurrentTimeSetFromHive();
-  // }
+  Future<void> _setup() async {
+    await _timeSetService.initialization();
+  }
 
   // Future<void> _readCurrentTimeSetFromHive() async {
   //   final pref = await SharedPreferences.getInstance();
@@ -113,103 +104,91 @@ class TimeSetModule with ChangeNotifier {
   // }
 
   ///Calculation timeset's parameters
-
-  TimeOfDay startTimeOfSet(TimeSet timeSetInHive) => TimeOfDay(
-      hour: timeSetInHive.startHours, minute: timeSetInHive.startMinutes);
-
-  String startSet (){
-    return _timeSetService.startHhMm();
+  TimeOfDay startSet() {
+    return TimeOfDay.fromDateTime(_timeSetService.startTimeSet());
   }
 
-  String finishSet(){
-    return _timeSetService.finishFormatHhMm();
+  TimeOfDay finishSet() {
+    return TimeOfDay.fromDateTime(_timeSetService.finishTimeSet());
   }
 
-  String durationSet(){
+  String durationSet() {
     return _timeSetService.durationFormatHHMm();
   }
 
-  TimeOfDay finishTime() {
-    final finishHour = startTimeOfSet(timeSet).hour + timeSet.hoursDuration;
-    final finishMinutes =
-        startTimeOfSet(timeSet).minute + timeSet.minutesDuration;
-    final finish = startTimeOfSet(timeSet)
-        .replacing(hour: finishHour, minute: finishMinutes);
-    return finish;
+  String titleTimeSet() {
+    return _timeSetService.timeSet.title;
   }
 
-  String durationTimeSet() {
-    DateTime _startInDateTime = DateTime(
-        0, 1, 1, startTimeOfSet(timeSet).hour, startTimeOfSet(timeSet).minute);
-    DateTime _finishInDateTime =
-        DateTime(0, 1, 1, finishTime().hour, finishTime().minute);
-
-    final _durationOfTimeSetInMinutes =
-        _finishInDateTime.difference(_startInDateTime).inMinutes;
-
-    final _durationInHourFormat = _durationOfTimeSetInMinutes ~/ 60;
-    final _durationInMinutesFormat =
-        _durationOfTimeSetInMinutes - (_durationInHourFormat * 60).round();
-
-    return '$_durationInHourFormat:$_durationInMinutesFormat';
-  }
 
   Future<void> changeStartTime(BuildContext context) async {
+    final startTime = TimeOfDay.fromDateTime(_timeSetService.startTimeSet());
     final TimeOfDay? newValue = await showTimePicker(
       context: context,
-      initialTime: startTimeOfSet(timeSet),
+      initialTime: startTime,
     );
     if (newValue == null) {
-      startTimeOfSet(timeSet);
+      startTime;
     } else {
-      timeSet.startHours = newValue.hour;
-      timeSet.startMinutes = newValue.minute;
-      timeSet.save();
+      _timeSetService.changeStartTimeSet(newValue);
     }
-    calculateStartTimeOfItems(_itemsTimeSet.length);
     notifyListeners();
   }
 
   Future<void> changeDuration(BuildContext context) async {
-    final TimeOfDay? newTime = await showTimePicker(
+    final TimeOfDay? newValue = await showTimePicker(
       context: context,
       initialTime: const TimeOfDay(hour: 1, minute: 0),
     );
-    newTime == null
-        ? timeSet.hoursDuration = 1
-        : timeSet.hoursDuration = newTime.hour;
-    newTime == null
-        ? timeSet.minutesDuration = 0
-        : timeSet.minutesDuration = newTime.minute;
+    _timeSetService.changeDuration(newValue);
 
-    // if (lastOpened != '') {
-    //   timeSet.save();
-    // }
-    calculateStartTimeOfItems(_itemsTimeSet.length);
+    //   // if (lastOpened != '') {
+    //   //   timeSet.save();
+    //   // }
+
     notifyListeners();
   }
 
   Future<void> changeFinishTime(BuildContext context) async {
-    TimeOfDay? newTime = await showTimePicker(
+    final finishTime = TimeOfDay.fromDateTime(_timeSetService.finishTimeSet());
+    TimeOfDay? newValue = await showTimePicker(
       context: context,
-      initialTime: finishTime(),
+      initialTime: finishTime,
     );
-    if (newTime == null) {
-      // значение hoursDuration  minutesDuration определяются исходя из предыдущей finishTime
-      timeSet.hoursDuration = finishTime().hour - startTimeOfSet(timeSet).hour;
-      timeSet.minutesDuration =
-          finishTime().minute - startTimeOfSet(timeSet).minute;
+    if (newValue == null) {
+      print('нет результата');
     } else {
-      // hoursDuration  minutesDuration определяются исходя из нового finishTime
-      timeSet.hoursDuration = newTime.hour - startTimeOfSet(timeSet).hour;
-      timeSet.minutesDuration = newTime.minute - startTimeOfSet(timeSet).minute;
+      final newFinish = DateTime(0,1,1, newValue.hour, newValue.minute);
+      final condition = newFinish.isBefore(_timeSetService.startTimeSet());
+      if (condition){
+        showAlert(context);
+      }
+      else {
+            _timeSetService.changeFinishTime(newValue);
+            notifyListeners();
+          }
+      }
+
     }
-    // if (lastOpened != '') {
-    //   timeSet.save();
-    // }
-    calculateStartTimeOfItems(_itemsTimeSet.length);
-    notifyListeners();
+
+  Future<void> showAlert(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: const Text('Сохранить'),
+        content: Text('Нельзя'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text('Ok'),
+          ),
+        ],
+      ),
+    );
   }
+
 
 
   ///Items operations
@@ -249,31 +228,31 @@ class TimeSetModule with ChangeNotifier {
   }
 
   void addListItems(int counter, int startNumber) {
-    for (int i = 0; i < counter; i++) {
-      addItem(i, startNumber);
-      startNumber++;
-    }
-    notifyListeners();
+    //   for (int i = 0; i < counter; i++) {
+    //     addItem(i, startNumber);
+    //     startNumber++;
+    //   }
+    //   notifyListeners();
   }
 
   void addItem(int index, int startNumber) async {
-    Item item = Item(
-        titleItem: '',
-        chipsItem: <String>[startNumber.toString()],
-        startTimeItemHours: 0,
-        startTimeItemMinutes: 0,
-        startTimeItemSeconds: 0,
-        isVerse: false,
-        isPicture: false,
-        isTable: false);
-   // await addNumberChipsInHive(startNumber);
-   // (await boxOfItems).add(item);
-   // timeSet.addItem((await boxOfItems), item);
-   // timeSet.save();
-    _itemsTimeSet = timeSet.items as List<Item>;
-    calculateAverageDurationOfItem(_itemsTimeSet.length);
-    calculateStartTimeOfItems(_itemsTimeSet.length);
-    notifyListeners();
+    //   Item item = Item(
+    //       titleItem: '',
+    //       chipsItem: <String>[startNumber.toString()],
+    //       startTimeItemHours: 0,
+    //       startTimeItemMinutes: 0,
+    //       startTimeItemSeconds: 0,
+    //       isVerse: false,
+    //       isPicture: false,
+    //       isTable: false);
+    //  // await addNumberChipsInHive(startNumber);
+    //  // (await boxOfItems).add(item);
+    //  // timeSet.addItem((await boxOfItems), item);
+    //  // timeSet.save();
+    //  // _itemsTimeSet = timeSet.items as List<Item>;
+    //   calculateAverageDurationOfItem(_itemsTimeSet.length);
+    //   calculateStartTimeOfItems(_itemsTimeSet.length);
+    //   notifyListeners();
   }
 
   // Future<void> addNumberChipsInHive(int startNumber) async {
@@ -291,160 +270,159 @@ class TimeSetModule with ChangeNotifier {
   //   }
   // }
 
-  void addNewItem({
-    required String titleItem,
-    required List<String> chipsItem,
-    required bool isVerse,
-    required bool isPicture,
-    required bool isTable,
-  }) async {
-    Item item = Item(
-        titleItem: titleItem,
-        chipsItem: chipsItem,
-        startTimeItemHours: 0,
-        startTimeItemMinutes: 0,
-        startTimeItemSeconds: 0,
-        isVerse: isVerse,
-        isPicture: isPicture,
-        isTable: isTable);
-    // (await boxOfItems).add(item);
-    // timeSet.addItem((await boxOfItems), item);
-    timeSet.save();
-    _itemsTimeSet = timeSet.items as List<Item>;
-
-    calculateAverageDurationOfItem(_itemsTimeSet.length);
-    calculateStartTimeOfItems(_itemsTimeSet.length);
-    notifyListeners();
+  void addNewItem() {
+    //   required String titleItem,
+    //   required List<String> chipsItem,
+    //   required bool isVerse,
+    //   required bool isPicture,
+    //   required bool isTable,
+    // }) async {
+    //   Item item = Item(
+    //       titleItem: titleItem,
+    //       chipsItem: chipsItem,
+    //       startTimeItemHours: 0,
+    //       startTimeItemMinutes: 0,
+    //       startTimeItemSeconds: 0,
+    //       isVerse: isVerse,
+    //       isPicture: isPicture,
+    //       isTable: isTable);
+    //   // (await boxOfItems).add(item);
+    //   // timeSet.addItem((await boxOfItems), item);
+    //   // timeSet.save();
+    //   // _itemsTimeSet = timeSet.items as List<Item>;
+    //
+    //   calculateAverageDurationOfItem(_itemsTimeSet.length);
+    //   calculateStartTimeOfItems(_itemsTimeSet.length);
+    //   notifyListeners();
   }
 
   void insertItemAbove(int itemIndex) async {
-    Item item = Item(
-        titleItem: '',
-        chipsItem: [],
-        startTimeItemHours: 0,
-        startTimeItemMinutes: 0,
-        startTimeItemSeconds: 0,
-        isVerse: false,
-        isPicture: false,
-        isTable: false);
-
-   // (await boxOfItems).add(item);
-    _itemsTimeSet.insert(itemIndex, item);
-    timeSet.save();
-    calculateAverageDurationOfItem(_itemsTimeSet.length);
-    calculateStartTimeOfItems(_itemsTimeSet.length);
-    notifyListeners();
+    //   Item item = Item(
+    //       titleItem: '',
+    //       chipsItem: [],
+    //       startTimeItemHours: 0,
+    //       startTimeItemMinutes: 0,
+    //       startTimeItemSeconds: 0,
+    //       isVerse: false,
+    //       isPicture: false,
+    //       isTable: false);
+    //
+    //  // (await boxOfItems).add(item);
+    //   _itemsTimeSet.insert(itemIndex, item);
+    //   // timeSet.save();
+    //   calculateAverageDurationOfItem(_itemsTimeSet.length);
+    //   calculateStartTimeOfItems(_itemsTimeSet.length);
+    //   notifyListeners();
   }
 
   void insertItemUnder(int itemIndex) async {
-    Item item = Item(
-        titleItem: '',
-        chipsItem: [],
-        startTimeItemHours: 0,
-        startTimeItemMinutes: 0,
-        startTimeItemSeconds: 0,
-        isVerse: false,
-        isPicture: false,
-        isTable: false);
-
-   // (await boxOfItems).add(item);
-    _itemsTimeSet.insert(itemIndex + 1, item);
-    timeSet.save();
-    calculateAverageDurationOfItem(_itemsTimeSet.length);
-    calculateStartTimeOfItems(_itemsTimeSet.length);
-    notifyListeners();
+    //   Item item = Item(
+    //       titleItem: '',
+    //       chipsItem: [],
+    //       startTimeItemHours: 0,
+    //       startTimeItemMinutes: 0,
+    //       startTimeItemSeconds: 0,
+    //       isVerse: false,
+    //       isPicture: false,
+    //       isTable: false);
+    //
+    //  // (await boxOfItems).add(item);
+    //   _itemsTimeSet.insert(itemIndex + 1, item);
+    //   // timeSet.save();
+    //   calculateAverageDurationOfItem(_itemsTimeSet.length);
+    //   calculateStartTimeOfItems(_itemsTimeSet.length);
+    //   notifyListeners();
   }
 
-  void calculateStartTimeOfItems(int countOfItems) {
-    //конвертация времени старта позиции в DateTime формат,
-    //чтобы затем его преобразовать в TimeOfDay
-    DateTime startDateTimeOfItem = DateTime(
-        0, 1, 1, startTimeOfSet(timeSet).hour, startTimeOfSet(timeSet).minute);
-
-    //calculateAverageDurationOfItem(_itemsTimeSet.length);
-
-    // расчет и присваивание времени старта каждой позиции из расчета средней продолжительности позиции
-    for (int i = 0; i < countOfItems; i++) {
-      final startTimeItem = TimeOfDay.fromDateTime(startDateTimeOfItem);
-
-      // if (lastOpened != '') {
-      //   // если расчет делается не впервые
-      //   if (timeSet.items != null) {
-      //     timeSet.items![i].startTimeItemHours = startTimeItem.hour;
-      //     timeSet.items![i].startTimeItemMinutes = startTimeItem.minute;
-      //     timeSet.save();
-      //     timeSet.items![i].save();
-      //   }
-      // } else {
-      //   _itemsTimeSet[i].startTimeItemHours = startTimeItem.hour;
-      //   _itemsTimeSet[i].startTimeItemMinutes = startTimeItem.minute;
-      // }
-      //вычисление и изменение времени старта следующего пункта
-      final durationOfItemInMinutes = timeSet.items![i].durationInMinutes;
-      final durationOfItemInSeconds = timeSet.items![i].durationInSeconds;
-      final durationOfItem = Duration(minutes: durationOfItemInMinutes, seconds: durationOfItemInSeconds);
-      //startDateTimeOfItem = startDateTimeOfItem.add(averageDurationOfItem);
-      startDateTimeOfItem = startDateTimeOfItem.add(durationOfItem);
-    }
-  }
-
-  void calculateAverageDurationOfItem(int countOfItems) {
-      final durationTimeSet = Duration(
-          hours: timeSet.hoursDuration, minutes: timeSet.minutesDuration);
-      double averageDurationOfItemInMinutes =
-          durationTimeSet.inMinutes / countOfItems;
-      int durationOfItemHours = (averageDurationOfItemInMinutes/60).floor();
-      int durationOfItemMinutes = averageDurationOfItemInMinutes.floor();
-      int durationOfItemSeconds =
-          ((averageDurationOfItemInMinutes - durationOfItemMinutes) * 60)
-              .round();
-    saveAverageDurationOfItem(countOfItems,durationOfItemHours, durationOfItemMinutes, durationOfItemSeconds);
-  }
-
-  void saveAverageDurationOfItem(int countOfItems, int durationOfItemHours, int durationOfItemMinutes,int durationOfItemSeconds ){
-    for (int i = 0; i < countOfItems; i++) {
-      // if (lastOpened != '') {
-      //   // если расчет делается не впервые
-      //   if (timeSet.items != null) {
-      //     timeSet.items![i].durationHours = durationOfItemHours;
-      //     timeSet.items![i].durationInMinutes = durationOfItemMinutes;
-      //     timeSet.items![i].durationInSeconds = durationOfItemSeconds;
-      //     timeSet.save();
-      //     timeSet.items![i].save();
-      //   }
-      // } else {
-      //   _itemsTimeSet[i].durationHours = durationOfItemHours;
-      //   _itemsTimeSet[i].durationInMinutes = durationOfItemMinutes;
-      //   _itemsTimeSet[i].durationInSeconds = durationOfItemSeconds;
-      // }
-    }
-  }
-
+  // void calculateStartTimeOfItems(int countOfItems) {
+  //   //конвертация времени старта позиции в DateTime формат,
+  //   //чтобы затем его преобразовать в TimeOfDay
+  //   // DateTime startDateTimeOfItem = DateTime(
+  //   //     0, 1, 1, startTimeOfSet(timeSet).hour, startTimeOfSet(timeSet).minute);
+  //
+  //   //calculateAverageDurationOfItem(_itemsTimeSet.length);
+  //
+  //   // расчет и присваивание времени старта каждой позиции из расчета средней продолжительности позиции
+  //   for (int i = 0; i < countOfItems; i++) {
+  //     final startTimeItem = TimeOfDay.fromDateTime(startDateTimeOfItem);
+  //
+  //     // if (lastOpened != '') {
+  //     //   // если расчет делается не впервые
+  //     //   if (timeSet.items != null) {
+  //     //     timeSet.items![i].startTimeItemHours = startTimeItem.hour;
+  //     //     timeSet.items![i].startTimeItemMinutes = startTimeItem.minute;
+  //     //     timeSet.save();
+  //     //     timeSet.items![i].save();
+  //     //   }
+  //     // } else {
+  //     //   _itemsTimeSet[i].startTimeItemHours = startTimeItem.hour;
+  //     //   _itemsTimeSet[i].startTimeItemMinutes = startTimeItem.minute;
+  //     // }
+  //     //вычисление и изменение времени старта следующего пункта
+  //     final durationOfItemInMinutes = timeSet.items![i].durationInMinutes;
+  //     final durationOfItemInSeconds = timeSet.items![i].durationInSeconds;
+  //     final durationOfItem = Duration(minutes: durationOfItemInMinutes, seconds: durationOfItemInSeconds);
+  //     //startDateTimeOfItem = startDateTimeOfItem.add(averageDurationOfItem);
+  //     startDateTimeOfItem = startDateTimeOfItem.add(durationOfItem);
+  //   }
+  // }
+  //
+  // void calculateAverageDurationOfItem(int countOfItems) {
+  //     final durationTimeSet = Duration(
+  //         hours: timeSet.hoursDuration, minutes: timeSet.minutesDuration);
+  //     double averageDurationOfItemInMinutes =
+  //         durationTimeSet.inMinutes / countOfItems;
+  //     int durationOfItemHours = (averageDurationOfItemInMinutes/60).floor();
+  //     int durationOfItemMinutes = averageDurationOfItemInMinutes.floor();
+  //     int durationOfItemSeconds =
+  //         ((averageDurationOfItemInMinutes - durationOfItemMinutes) * 60)
+  //             .round();
+  //   saveAverageDurationOfItem(countOfItems,durationOfItemHours, durationOfItemMinutes, durationOfItemSeconds);
+  // }
+  //
+  // void saveAverageDurationOfItem(int countOfItems, int durationOfItemHours, int durationOfItemMinutes,int durationOfItemSeconds ){
+  //   for (int i = 0; i < countOfItems; i++) {
+  //     // if (lastOpened != '') {
+  //     //   // если расчет делается не впервые
+  //     //   if (timeSet.items != null) {
+  //     //     timeSet.items![i].durationHours = durationOfItemHours;
+  //     //     timeSet.items![i].durationInMinutes = durationOfItemMinutes;
+  //     //     timeSet.items![i].durationInSeconds = durationOfItemSeconds;
+  //     //     timeSet.save();
+  //     //     timeSet.items![i].save();
+  //     //   }
+  //     // } else {
+  //     //   _itemsTimeSet[i].durationHours = durationOfItemHours;
+  //     //   _itemsTimeSet[i].durationInMinutes = durationOfItemMinutes;
+  //     //   _itemsTimeSet[i].durationInSeconds = durationOfItemSeconds;
+  //     // }
+  //   }
+  // }
 
   void clearAllList(BuildContext context) async {
     _itemsTimeSet.clear();
-   // numberChips.clear();
+    // numberChips.clear();
     context.read<CounterModel>().startNumber = 1;
     // (await boxListOfItems).delete(timeSet.title);
     // (await boxListOfItems).put(timeSet.title, _listParts);
     notifyListeners();
   }
 
-  // void deleteTimeSet(String keyOfTimeSet) async {
-  //   var _deleteTimeSet = (await boxTimeSet).get(keyOfTimeSet);
-  //   _deleteTimeSet?.items?.deleteAllFromHive();
-  //   (await boxOfItems).compact();
-  //   _deleteTimeSet?.numberChips?.deleteAllFromHive();
-  //   (await boxNumberChips).compact();
-  //   _deleteTimeSet?.delete();
-  //   (await boxTimeSet).compact();
-  // }
+  void deleteTimeSet(String keyOfTimeSet) async {
+    //   var _deleteTimeSet = (await boxTimeSet).get(keyOfTimeSet);
+    //   _deleteTimeSet?.items?.deleteAllFromHive();
+    //   (await boxOfItems).compact();
+    //   _deleteTimeSet?.numberChips?.deleteAllFromHive();
+    //   (await boxNumberChips).compact();
+    //   _deleteTimeSet?.delete();
+    //   (await boxTimeSet).compact();
+  }
 
   void deleteItemFromList(int keyOfTimeSet) async {
-    timeSet.items!.deleteFromHive(keyOfTimeSet);
-    calculateAverageDurationOfItem(_itemsTimeSet.length);
-    calculateStartTimeOfItems(_itemsTimeSet.length);
-    notifyListeners();
+    //   timeSet.items!.deleteFromHive(keyOfTimeSet);
+    //   calculateAverageDurationOfItem(_itemsTimeSet.length);
+    //   calculateStartTimeOfItems(_itemsTimeSet.length);
+    //   notifyListeners();
   }
 
   void changeIsPicture(item) {
