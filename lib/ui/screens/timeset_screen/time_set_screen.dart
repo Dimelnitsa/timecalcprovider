@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:timecalcprovider/navigation/navigation_routs.dart';
 import '../dialogs_screen/save_set_dialog.dart';
-import '../drawer_screen/drawer_screen.dart';
+import '../drawer_screen/drawer_time_set_screen.dart';
 import 'widgets/fab_menu.dart';
 import 'widgets/list_of_items.dart';
 import 'time_set_model.dart';
@@ -33,7 +33,7 @@ class _TimeSetScreenState extends State<TimeSetScreen> {
         title: Text(_titleTimeSet),
         actions: ListOfActionButtons(context),
       ),
-      drawer: const DrawerScreen(),
+      drawer: const DrawerTimeSetScreen(),
       body: ListOfItems(),
       floatingActionButton: fabVisible ? const MenuFab() : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,

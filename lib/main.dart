@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import 'package:timecalcprovider/l10n/l10n.dart';
 import 'package:timecalcprovider/repository/counter_model.dart';
 import 'ui/screens/timeset_screen/time_set_model.dart';
-import 'ui/screens/drawer_screen/draw_screen_model.dart';
 import 'navigation/navigation_routs.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -18,7 +17,6 @@ void main() async {
     MultiProvider(providers: [
       ChangeNotifierProvider(create: (BuildContext context) => TimeSetModule()),
       ChangeNotifierProvider(create: (BuildContext context) => CounterModel()),
-      ChangeNotifierProvider(create: (BuildContext context) => DrawScreenModel()),
     ], child: const MyApp()),
   );
 

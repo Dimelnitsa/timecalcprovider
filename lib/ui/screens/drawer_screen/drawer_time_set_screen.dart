@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../timeset_screen/time_set_model.dart';
 
-class DrawerScreen extends StatefulWidget {
-  const DrawerScreen({Key? key}) : super(key: key);
+class DrawerTimeSetScreen extends StatefulWidget {
+  const DrawerTimeSetScreen({Key? key}) : super(key: key);
 
   @override
-  State<DrawerScreen> createState() => _DrawerScreenState();
+  State<DrawerTimeSetScreen> createState() => _DrawerTimeSetScreenState();
 }
 
-class _DrawerScreenState extends State<DrawerScreen> {
+class _DrawerTimeSetScreenState extends State<DrawerTimeSetScreen> {
   @override
   Widget build(BuildContext context) {
     return const DrawerScreenBody();
