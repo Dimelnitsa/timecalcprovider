@@ -1,33 +1,38 @@
-import 'package:flutter/material.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../repository/number_chips_data.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import '../../repository/time_set.dart';
 import 'hive_manager.dart';
 
 class TimeSetDataProvider {
-  var _timeSetFromHive = TimeSet(
-      title: 'Новый',
-      startHours: TimeOfDay.now().hour.toInt(),
-      startMinutes: TimeOfDay.now().minute.toInt(),
-      dateTimeSaved: DateTime.now());
 
-  TimeSet get timeSetFromHive => _timeSetFromHive;
+  // var _timeSetFromHive = TimeSet(
+  //     title: 'Новый',
+  //     startHours: TimeOfDay.now().hour.toInt(),
+  //     startMinutes: TimeOfDay.now().minute.toInt(),
+  //     dateTimeSaved: DateTime.now());
+  // TimeSet get timeSetFromHive => _timeSetFromHive;
 
-  final Future<Box<TimeSet>> boxTimeSet = HiveManager.instance.openTimeSetBox();
+  final Future<Box<TimeSet>> _boxTimeSet = HiveManager.instance.openTimeSetBox();
+
 
   //  final boxNumberChips = HiveManager.instance.NumbersChoiceChipsBox();
 
 
-  Future<void> loadTimeSetFromHive(String keyOfTimeSet) async {
-    _timeSetFromHive = (await boxTimeSet).get(keyOfTimeSet)!;
+  Future<TimeSet> loadTimeSetFromHive(String keyOfTimeSet) async {
+    //_timeSetFromHive = (await _boxTimeSet).get(keyOfTimeSet)!;
+    return (await _boxTimeSet).get(keyOfTimeSet)!;
     // _itemsTimeSetFromHive = _timeSetFromHive.items as List<Item>;
     // numberChips = timeSet.numberChips as List<NumberChipData>;
   }
 
+
+
+  Future<List<TimeSet>> listOTimeSetsFromHive() async {
+    return (await _boxTimeSet).values.toList();
+  }
+
   Future<void> closeBoxTimeSet() async {
-    HiveManager.instance.closeBox((await boxTimeSet));
+    HiveManager.instance.closeBox((await _boxTimeSet));
   }
 
 

@@ -18,6 +18,9 @@ class TimeSetService {
 
   final _timeSetDataProvider = TimeSetDataProvider();
 
+  // var _listTimeSets = <TimeSet>[];
+  // List<TimeSet> get listTimeSets => _listTimeSets;
+
   // TimeOfDay startTimeOfSet() => TimeOfDay(
   //     hour: _timeSet.startHours, minute: _timeSet.startMinutes);
 
@@ -32,13 +35,24 @@ class TimeSetService {
   }
 
   Future<void> initializationTimeSet() async {
-   await _timeSetDataProvider.loadTimeSetFromHive(_lastSet);
-    _timeSet = await _timeSetDataProvider.timeSetFromHive;
+    await loadLastSet();
+    _timeSet = await _timeSetDataProvider.loadTimeSetFromHive(_lastSet);
+  }
+
+  Future<void> loadTimeSet(String keyOfTimeSet) async {
+    _lastSet = keyOfTimeSet;
+    await saveLastSet();
+    _timeSet = await _timeSetDataProvider.loadTimeSetFromHive(keyOfTimeSet);
+  }
+
+  Future<List<TimeSet>> loadListOfTimeSets()async {
+    return await _timeSetDataProvider.listOTimeSetsFromHive();
   }
 
   Future<void> closeHive() async {
     await _timeSetDataProvider.closeBoxTimeSet();
   }
+
 
   ///Start time of Time Set
   DateTime startTimeSet() =>

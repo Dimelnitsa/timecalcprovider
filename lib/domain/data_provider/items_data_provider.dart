@@ -6,14 +6,13 @@ import 'hive_manager.dart';
 
 class ItemsDataProvider{
 
-
-  List<Item> _itemsTimeSetFromHive = [];
-  List<Item> get itemsTimeSetFromHive => _itemsTimeSetFromHive;
+  // List<Item> _itemsTimeSetFromHive = [];
+  // List<Item> get itemsTimeSetFromHive => _itemsTimeSetFromHive;
 
   final Future<Box<Item>> boxOfItems = HiveManager.instance.openItemsBox();
 
-  Future<void> loadItemsFromHive(TimeSet timeSet) async {
-    _itemsTimeSetFromHive = timeSet.items as List<Item>;
+  Future<List<Item>> loadItemsFromHive(TimeSet timeSet) async {
+     return await timeSet.items as List<Item>;
     // numberChips = timeSet.numberChips as List<NumberChipData>;
   }
 

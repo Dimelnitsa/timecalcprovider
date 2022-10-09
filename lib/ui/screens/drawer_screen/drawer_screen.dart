@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../timeset_screen/time_set_model.dart';
-import 'draw_screen_model.dart';
 
 class DrawerScreen extends StatefulWidget {
   const DrawerScreen({Key? key}) : super(key: key);
@@ -23,7 +22,7 @@ class DrawerScreenBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var timeSetsCount = context.watch<DrawScreenModel>().timeSets.length;
+    var timeSetsCount = context.watch<TimeSetModule>().timeSets.length;
 
     return Drawer(
       child: ListView.builder(
@@ -42,7 +41,7 @@ class TimeSetItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _timeSetItem = context.watch<DrawScreenModel>().timeSets[indexInList];
+    final _timeSetItem = context.watch<TimeSetModule>().timeSets[indexInList];
    // final _lastOpenedTimeSet = context.select((TimeSetModule module) => module.lastOpened);
     final startTimeSet = TimeOfDay(
         hour: _timeSetItem.startHours, minute: _timeSetItem.startMinutes);
@@ -55,7 +54,7 @@ class TimeSetItem extends StatelessWidget {
             'Start: ${startTimeSet.format(context)}/'
                 ' Duration: ${_timeSetItem.hoursDuration}:${_timeSetItem.minutesDuration}'),
         onTap: () {
-         // context.read<TimeSetModule>().loadTimeSet(_timeSetItem.title);
+          context.read<TimeSetModule>().loadTimeSet(_timeSetItem.title);
           Navigator.pop(context);
         },
         trailing: IconButton(

@@ -13,7 +13,7 @@ class ListOfItems extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final items = context.read<TimeSetModule>().itemsTimeSet();
+    final items = context.read<TimeSetModule>().listOfItems;
     return NotificationListener<UserScrollNotification>(
       onNotification: (notification) {
         if (notification.direction == ScrollDirection.forward) {
@@ -52,7 +52,7 @@ class ListOfItemWidgets extends StatefulWidget {
 class _ListOfItemWidgetsState extends State<ListOfItemWidgets> {
   @override
   Widget build(BuildContext context) {
-    final _listOfItems = context.watch<TimeSetModule>().itemsTimeSet();
+    final _listOfItems = context.watch<TimeSetModule>().listOfItems;
 
     return SliverList(
       delegate: SliverChildBuilderDelegate(
