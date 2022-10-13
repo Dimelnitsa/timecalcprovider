@@ -22,7 +22,7 @@ class DrawerScreenBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var timeSetsCount = context.watch<TimeSetModule>().timeSets.length;
+    var timeSetsCount = context.watch<TimeSetModule>().listOfTimeSets.length;
 
     return Drawer(
       child: ListView.builder(
@@ -41,7 +41,7 @@ class TimeSetItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _timeSetItem = context.watch<TimeSetModule>().timeSets[indexInList];
+    final _timeSetItem = context.watch<TimeSetModule>().listOfTimeSets[indexInList];
    // final _lastOpenedTimeSet = context.select((TimeSetModule module) => module.lastOpened);
     final startTimeSet = TimeOfDay(
         hour: _timeSetItem.startHours, minute: _timeSetItem.startMinutes);

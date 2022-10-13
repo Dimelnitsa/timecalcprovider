@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:timecalcprovider/domain/data_provider/time_set_data_provider.dart';
+import '../domain/data_provider/time_set_data_provider.dart';
 
 import '../repository/time_set.dart';
 
@@ -61,6 +61,8 @@ class TimeSetService {
   Future<void> changeStartTimeSet(TimeOfDay newValue) async {
     _timeSet.startHours = newValue.hour;
     _timeSet.startMinutes = newValue.minute;
+    await _timeSetDataProvider.saveTimeSetInHive(_timeSet);
+
 
     //   calculateStartTimeOfItems(_itemsTimeSet.length);
     //
@@ -88,7 +90,7 @@ class TimeSetService {
   void changeDuration(newValue) {
     _timeSet.hoursDuration = newValue.hour;
     _timeSet.minutesDuration = newValue.minute;
-
+   // _itemListService.changeDurationOfItems(_timeSet);
     //   calculateStartTimeOfItems(_itemsTimeSet.length);
   }
 
@@ -109,6 +111,7 @@ class TimeSetService {
 
         timeSet.hoursDuration = newValue.hour - startTimeSet().hour;
         timeSet.minutesDuration = newValue.minute - startTimeSet().minute;
+      //  _itemListService.changeDurationOfItems(_timeSet);
   //   if (newTime == null) {
   //     // значение hoursDuration  minutesDuration определяются исходя из предыдущей finishTime
   //     timeSet.hoursDuration = finishTime().hour - startTimeOfSet(timeSet).hour;

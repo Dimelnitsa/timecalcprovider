@@ -67,7 +67,8 @@ class _ListOfItemWidgetsState extends State<ListOfItemWidgets> {
                 onDismissed: (direction) {
                   context.read<TimeSetModule>().deleteItemFromList(index);
                 },
-                child: ItemWidget(item: item, index: index)),
+                child: ItemWidget(
+                    index: index)),
             onTap: () {
               // context.read<TimeSetModule>().showEditItemDialog(context, item);
               Navigator.push(

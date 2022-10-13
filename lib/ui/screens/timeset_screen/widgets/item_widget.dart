@@ -6,14 +6,13 @@ import '../time_set_model.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ItemWidget extends StatelessWidget {
-  const ItemWidget({Key? key, required this.item, required this.index})
-      : super(key: key);
+  const ItemWidget({Key? key, required this.index}) : super(key: key);
 
-  final Item item;
   final int index;
 
   @override
   Widget build(BuildContext context) {
+    final item = context.watch<TimeSetModule>().listOfItems[index];
     return Container(
       margin: const EdgeInsets.only(left: 5.0, right: 5.0, bottom: 5.0),
       // padding:
@@ -105,7 +104,8 @@ class MyPopupMenuButton extends StatelessWidget {
                 child: Row(
                   children: [
                     Text('${local.quote} '),
-                    const Icon(Icons.menu_book)],
+                    const Icon(Icons.menu_book)
+                  ],
                 ),
               ),
               PopupMenuItem(
@@ -149,13 +149,14 @@ class StartTime extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final startTimeItem = TimeOfDay(
-    //     hour: item.startTimeItemHours, minute: item.startTimeItemMinutes, );
-    final startTime = DateTime(0, 0, 0, item.startTimeItemHours, item.startTimeItemMinutes);
-    String formattedDate = DateFormat('HH:mm:ss').format(startTime);
-    final durationOfItemInHours = item.durationHours;
-    final durationOfItemInMinutes = item.durationInMinutes;
-    final durationOfItemInSeconds = item.durationInSeconds;
+    final startTime = DateTime(0, 0, 0, item.startTimeItemHours,
+        item.startTimeItemMinutes, item.startTimeItemSeconds).toLocal();
+
+    final formatStartTime = DateFormat('HH:mm:ss').format(startTime);
+
+    final durationDateFormat = DateTime(0, 0, 0, item.durationHours,
+        item.durationInMinutes, item.durationInSeconds);
+    final duration = DateFormat('HH:mm:ss').format(durationDateFormat);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -165,11 +166,11 @@ class StartTime extends StatelessWidget {
         //   style: const TextStyle(fontSize: 16),
         // ),
         Text(
-          formattedDate,
+          formatStartTime,
           style: const TextStyle(fontSize: 16),
         ),
         Text(
-          '$durationOfItemInHours:$durationOfItemInMinutes:$durationOfItemInSeconds',
+          duration,
           style: const TextStyle(fontSize: 12, color: Colors.black38),
         ),
       ],

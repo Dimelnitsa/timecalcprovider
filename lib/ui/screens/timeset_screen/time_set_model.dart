@@ -1,30 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:timecalcprovider/repository/counter_model.dart';
+import 'package:timecalcprovider/services/num_chips_service.dart';
+import '../../../repository/counter_model.dart';
 import '../../../repository/item.dart';
+import '../../../repository/number_chips_data.dart';
 import '../../../repository/time_set.dart';
-import '../../../services/item_service.dart';
+import '../../../services/item_list_service.dart';
 import '../../../services/time_set_service.dart';
 import '../dialogs_screen/numeral_item_dialog.dart';
 
 class TimeSetModule with ChangeNotifier {
 
   final _timeSetService = TimeSetService();
+  late final _timeSet;
+  TimeSet get timeSet => _timeSet;
+  List<TimeSet> _listOfTimeSets = [];
+  List<TimeSet> get listOfTimeSets => _listOfTimeSets.toList();
+
   final _itemListService = ItemListService();
-
-  var _timeSets = <TimeSet>[];
-  List<TimeSet> get timeSets => _timeSets.toList();
-  // late final Future<Box<TimeSet>> boxTimeSet;
-  // late final Future<Box<Item>> boxOfItems;
-  // late final Future<Box<NumberChipData>> boxNumberChips;
-
-  //List<Item> get itemsTimeSet => _itemsTimeSet.toList();
   List<Item> _listOfItems = [];
   List<Item> get listOfItems => _listOfItems;
+
   bool _isFabVisible = true;
   // String? lastOpened = '';
 
-  // List<NumberChipData> numberChips = [];
+  final _numChipsService = NumChipsService();
+  List<NumberChipData> _numberChips = [];
+  List<NumberChipData> get numberChips => _numberChips;
+
 
   TimeSetModule() {
     _setup();
@@ -33,23 +36,28 @@ class TimeSetModule with ChangeNotifier {
   ///Hive.
   Future<void> _setup() async {
     await _timeSetService.initializationTimeSet();
-    _listOfItems = await _itemListService.loadListOfItems(_timeSetService.timeSet);
-   await _loadListOfTimeSets();
+   await getListItems();
+    _numberChips = await _numChipsService.getListOfNumberChips(_timeSetService.timeSet);
+   await _getTimeSetList();
     notifyListeners();
   }
 
-  Future<void> _loadListOfTimeSets() async {
-    _timeSets = await _timeSetService.loadListOfTimeSets();
+  Future<void> _getTimeSetList() async {
+    _listOfTimeSets = await _timeSetService.loadListOfTimeSets();
     notifyListeners();
   }
 
   Future<void> loadTimeSet(String keyOfTimeSet)async{
     await _timeSetService.loadTimeSet(keyOfTimeSet);
-    _listOfItems = await _itemListService.loadListOfItems(_timeSetService.timeSet);
+    _listOfItems = await _itemListService.getListOfItems(_timeSetService.timeSet);
+    _numberChips = await _numChipsService.getListOfNumberChips(_timeSetService.timeSet);
     notifyListeners();
   }
 
-
+  Future<List<Item>> getListItems() async{
+    _listOfItems = await _itemListService.getListOfItems(_timeSetService.timeSet);
+    return _listOfItems;
+  }
 
   // Future<void> _readCurrentTimeSetFromHive() async {
   //   final pref = await SharedPreferences.getInstance();
@@ -82,16 +90,6 @@ class TimeSetModule with ChangeNotifier {
   //   }
   // }
 
-  // Future<void> loadTimeSet(String keyOfTimeSet) async {
-  //   final prefs = await SharedPreferences.getInstance();
-  //   lastOpened = keyOfTimeSet;
-  //   prefs.setString('lastopened', lastOpened!);
-  //
-  //   timeSet = (await boxTimeSet).get(keyOfTimeSet)!;
-  //   _itemsTimeSet = timeSet.items as List<Item>;
-  //   numberChips = timeSet.numberChips as List<NumberChipData>;
-  //   notifyListeners();
-  // }
 
   // Future<void> saveNewTimeSet(String title) async {
   //   final _savedTimeSet = TimeSet(
@@ -120,7 +118,7 @@ class TimeSetModule with ChangeNotifier {
   //   await loadTimeSet(title);
   // }
 
-  ///Calculation timeset's parameters
+  ///Calculation time_set's parameters
   TimeOfDay startSet() {
     return TimeOfDay.fromDateTime(_timeSetService.startTimeSet());
   }
@@ -148,6 +146,7 @@ class TimeSetModule with ChangeNotifier {
       startTime;
     } else {
       _timeSetService.changeStartTimeSet(newValue);
+      _itemListService.calculateStartTimeOfItems(_timeSetService.timeSet);
     }
     notifyListeners();
   }
@@ -384,18 +383,7 @@ class TimeSetModule with ChangeNotifier {
   //   }
   // }
   //
-  // void calculateAverageDurationOfItem(int countOfItems) {
-  //     final durationTimeSet = Duration(
-  //         hours: timeSet.hoursDuration, minutes: timeSet.minutesDuration);
-  //     double averageDurationOfItemInMinutes =
-  //         durationTimeSet.inMinutes / countOfItems;
-  //     int durationOfItemHours = (averageDurationOfItemInMinutes/60).floor();
-  //     int durationOfItemMinutes = averageDurationOfItemInMinutes.floor();
-  //     int durationOfItemSeconds =
-  //         ((averageDurationOfItemInMinutes - durationOfItemMinutes) * 60)
-  //             .round();
-  //   saveAverageDurationOfItem(countOfItems,durationOfItemHours, durationOfItemMinutes, durationOfItemSeconds);
-  // }
+
   //
   // void saveAverageDurationOfItem(int countOfItems, int durationOfItemHours, int durationOfItemMinutes,int durationOfItemSeconds ){
   //   for (int i = 0; i < countOfItems; i++) {

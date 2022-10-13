@@ -14,7 +14,7 @@ class TimeSetupPanel extends StatelessWidget {
       mainAxisSize: MainAxisSize.max,
       children: const [
         StartTimeSet(),
-        DurationInputTextField(),
+        DurationTimeSet(),
         FinishTimeSet()
       ],
     );
@@ -29,7 +29,6 @@ class StartTimeSet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final startSet = context.watch<TimeSetModule>().startSet().format(context);
-
     return Flexible(
       flex: 1,
       child: Padding(
@@ -55,16 +54,14 @@ class StartTimeSet extends StatelessWidget {
   }
 }
 
-class DurationInputTextField extends StatelessWidget {
-  const DurationInputTextField({
+class DurationTimeSet extends StatelessWidget {
+  const DurationTimeSet({
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final durationSet = context.watch<TimeSetModule>().durationSet();
-
-
     return Flexible(
       flex: 1,
       child: Padding(

@@ -14,10 +14,6 @@ class TimeSetDataProvider {
 
   final Future<Box<TimeSet>> _boxTimeSet = HiveManager.instance.openTimeSetBox();
 
-
-  //  final boxNumberChips = HiveManager.instance.NumbersChoiceChipsBox();
-
-
   Future<TimeSet> loadTimeSetFromHive(String keyOfTimeSet) async {
     //_timeSetFromHive = (await _boxTimeSet).get(keyOfTimeSet)!;
     return (await _boxTimeSet).get(keyOfTimeSet)!;
@@ -95,4 +91,10 @@ class TimeSetDataProvider {
   //   _savedTimeSet.save();
   //   await loadTimeSetFromHive(title);
   // }
+
+Future<void> saveTimeSetInHive(TimeSet timeSet) async{
+    await timeSet.save();
+}
+
+
 }
