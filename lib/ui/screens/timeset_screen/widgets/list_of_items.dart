@@ -74,7 +74,7 @@ class _ListOfItemWidgetsState extends State<ListOfItemWidgets> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => EditItemScreen(item: item)));
+                      builder: (context) => EditItemScreen(item: item,)));
             },
           );
         },

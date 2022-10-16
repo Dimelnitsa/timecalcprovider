@@ -1,52 +1,50 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:timecalcprovider/services/session_service.dart';
 import '../domain/data_provider/time_set_data_provider.dart';
-
 import '../repository/time_set.dart';
 
 class TimeSetService {
-  var _timeSet = TimeSet(
+
+  var _timeSet= TimeSet(
       title: 'Новый',
       startHours: TimeOfDay.now().hour.toInt(),
       startMinutes: TimeOfDay.now().minute.toInt(),
       dateTimeSaved: DateTime.now());
-
   TimeSet get timeSet => _timeSet;
-
-  String _lastSet = 'Новый';
-
   final _timeSetDataProvider = TimeSetDataProvider();
 
-  // var _listTimeSets = <TimeSet>[];
-  // List<TimeSet> get listTimeSets => _listTimeSets;
+  final _sessionService = SessionService();
 
-  // TimeOfDay startTimeOfSet() => TimeOfDay(
-  //     hour: _timeSet.startHours, minute: _timeSet.startMinutes);
+  Future<TimeSet> loadTimeSet(String keyOfTimeSet) async {
+    if ((await _timeSetDataProvider.getTimeSetFromHive(keyOfTimeSet)) == null){
+      _sessionService.saveLastSession(_timeSet.title);
+      return _timeSet;
+    } else {
+      _timeSet = (await _timeSetDataProvider.getTimeSetFromHive(keyOfTimeSet))!;
+      _sessionService.saveLastSession(_timeSet.title);
+      return _timeSet;
+    }
 
-  Future<void> saveLastSet() async {
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setString('last_opened', _lastSet);
-  }
-
-  Future<void> loadLastSet() async {
-    final pref = await SharedPreferences.getInstance();
-    _lastSet = pref.getString('last_opened')!;
-  }
-
-  Future<void> initializationTimeSet() async {
-    await loadLastSet();
-    _timeSet = await _timeSetDataProvider.loadTimeSetFromHive(_lastSet);
-  }
-
-  Future<void> loadTimeSet(String keyOfTimeSet) async {
-    _lastSet = keyOfTimeSet;
-    await saveLastSet();
-    _timeSet = await _timeSetDataProvider.loadTimeSetFromHive(keyOfTimeSet);
   }
 
   Future<List<TimeSet>> loadListOfTimeSets()async {
     return await _timeSetDataProvider.listOTimeSetsFromHive();
+  }
+
+  Future<void> saveChangesTimeSet()async{
+    _timeSetDataProvider.saveChangesOfTimeSetInHive(timeSet);
+  }
+
+  Future<void> saveNewTimeSet(String title) async {
+    final _savedTimeSet = TimeSet(
+        title: title,
+        startHours: timeSet.startHours,
+        startMinutes: timeSet.startMinutes,
+        hoursDuration: timeSet.hoursDuration,
+        minutesDuration: timeSet.minutesDuration,
+        dateTimeSaved: timeSet.dateTimeSaved);
+    _timeSetDataProvider.saveTimeSetInHive(title, _savedTimeSet);
   }
 
   Future<void> closeHive() async {
@@ -61,7 +59,7 @@ class TimeSetService {
   Future<void> changeStartTimeSet(TimeOfDay newValue) async {
     _timeSet.startHours = newValue.hour;
     _timeSet.startMinutes = newValue.minute;
-    await _timeSetDataProvider.saveTimeSetInHive(_timeSet);
+    await _timeSetDataProvider.saveChangesOfTimeSetInHive(_timeSet);
 
 
     //   calculateStartTimeOfItems(_itemsTimeSet.length);
@@ -90,8 +88,6 @@ class TimeSetService {
   void changeDuration(newValue) {
     _timeSet.hoursDuration = newValue.hour;
     _timeSet.minutesDuration = newValue.minute;
-   // _itemListService.changeDurationOfItems(_timeSet);
-    //   calculateStartTimeOfItems(_itemsTimeSet.length);
   }
 
   ///Finish time of Time Set

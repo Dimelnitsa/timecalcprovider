@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:timecalcprovider/services/num_chips_service.dart';
+import 'package:timecalcprovider/services/session_service.dart';
 import '../../../repository/counter_model.dart';
 import '../../../repository/item.dart';
 import '../../../repository/number_chips_data.dart';
@@ -10,10 +11,10 @@ import '../../../services/time_set_service.dart';
 import '../dialogs_screen/numeral_item_dialog.dart';
 
 class TimeSetModule with ChangeNotifier {
-
   final _timeSetService = TimeSetService();
-  late final _timeSet;
+  var _timeSet;
   TimeSet get timeSet => _timeSet;
+
   List<TimeSet> _listOfTimeSets = [];
   List<TimeSet> get listOfTimeSets => _listOfTimeSets.toList();
 
@@ -21,102 +22,62 @@ class TimeSetModule with ChangeNotifier {
   List<Item> _listOfItems = [];
   List<Item> get listOfItems => _listOfItems;
 
-  bool _isFabVisible = true;
-  // String? lastOpened = '';
-
   final _numChipsService = NumChipsService();
   List<NumberChipData> _numberChips = [];
   List<NumberChipData> get numberChips => _numberChips;
 
 
+  String? _lastSession;
+  final _sessionService = SessionService();
+
+
+  bool _isFabVisible = true;
+
   TimeSetModule() {
-    _setup();
+    _initializationTimeSet();
   }
 
-  ///Hive.
-  Future<void> _setup() async {
-    await _timeSetService.initializationTimeSet();
-   await getListItems();
-    _numberChips = await _numChipsService.getListOfNumberChips(_timeSetService.timeSet);
-   await _getTimeSetList();
-    notifyListeners();
-  }
-
-  Future<void> _getTimeSetList() async {
+  Future<void> _initializationTimeSet() async {
+    _lastSession = await _sessionService.getLastSession();
     _listOfTimeSets = await _timeSetService.loadListOfTimeSets();
+    if (_lastSession == null){
+      _lastSession = 'Новый';
+      print(_lastSession);
+      loadTimeSet(_lastSession!);
+      _sessionService.saveLastSession(_lastSession!);
+      notifyListeners();
+      await saveNewTimeSetAs(_lastSession!);
+    } else {
+
+      loadTimeSet(_lastSession!);
+      notifyListeners();
+    }
+
+  }
+
+  Future<void> loadTimeSet(String keyOfTimeSet) async {
+    _timeSet = await _timeSetService.loadTimeSet(keyOfTimeSet);
+    _listOfItems =
+        await _itemListService.getListOfItems(_timeSet);
+    _numberChips =
+        await _numChipsService.getListOfNumberChips(_timeSet);
     notifyListeners();
   }
 
-  Future<void> loadTimeSet(String keyOfTimeSet)async{
-    await _timeSetService.loadTimeSet(keyOfTimeSet);
-    _listOfItems = await _itemListService.getListOfItems(_timeSetService.timeSet);
-    _numberChips = await _numChipsService.getListOfNumberChips(_timeSetService.timeSet);
-    notifyListeners();
+  Future<void> saveNewTimeSetAs(String title) async {
+    ///1. save  Time Set in Hive
+   await _timeSetService.saveNewTimeSet(title);
+   _timeSet = await _timeSetService.loadTimeSet(title);
+   _listOfTimeSets = await _timeSetService.loadListOfTimeSets();
+    ///2. save listItems as HiveList of Time Set in Hive
+  await _itemListService.saveListOfItems(_timeSet);
+    ///4, save list of NumberChips in Hive
+   await _numChipsService.saveListOfNumberChips(_timeSet);
+    ///6. save savedTimeSet
+    await _timeSetService.saveChangesTimeSet();
+    ///7. open saved Time Set as current
+     await loadTimeSet(title);
   }
-
-  Future<List<Item>> getListItems() async{
-    _listOfItems = await _itemListService.getListOfItems(_timeSetService.timeSet);
-    return _listOfItems;
-  }
-
-  // Future<void> _readCurrentTimeSetFromHive() async {
-  //   final pref = await SharedPreferences.getInstance();
-  //   lastOpened = pref.getString('lastopened');
-  //
-  //   boxTimeSet = HiveManager.instance.openTimeSetBox();
-  //   boxOfItems = HiveManager.instance.openItemsBox();
-  //   boxNumberChips = HiveManager.instance.NumbersChoiceChipsBox();
-  //
-  //   if (lastOpened == null) {
-  //     lastOpened = 'Новый';
-  //     (await boxTimeSet).put(lastOpened, timeSet);
-  //     final _savedListParts =
-  //         _itemsTimeSet.map((item) => Item.clone(item)).toList();
-  //     (await boxOfItems).addAll(_savedListParts);
-  //     timeSet.addItems((await boxOfItems), _savedListParts);
-  //
-  //     (await boxNumberChips).addAll(numberChips);
-  //     timeSet.addListNumberChips((await boxNumberChips), numberChips);
-  //
-  //     timeSet.save();
-  //     (await boxOfItems).listenable().addListener(() {
-  //       loadTimeSet(lastOpened!);
-  //     });
-  //   } else {
-  //     await loadTimeSet(lastOpened!);
-  //     (await boxOfItems).listenable().addListener(() {
-  //       loadTimeSet(lastOpened!);
-  //     });
-  //   }
-  // }
-
-
-  // Future<void> saveNewTimeSet(String title) async {
-  //   final _savedTimeSet = TimeSet(
-  //       title: title,
-  //       startHours: timeSet.startHours,
-  //       startMinutes: timeSet.startMinutes,
-  //       hoursDuration: timeSet.hoursDuration,
-  //       minutesDuration: timeSet.minutesDuration,
-  //       dateTimeSaved: timeSet.dateTimeSaved);
-  //
-  //   (await boxTimeSet).put(title, _savedTimeSet);
-  //
-  //   final _savedListParts =
-  //       _itemsTimeSet.map((item) => Item.clone(item)).toList();
-  //   (await boxOfItems).addAll(_savedListParts);
-  //   _savedTimeSet.addItems((await boxOfItems), _savedListParts);
-  //
-  //   final _savedListNumberChips = numberChips
-  //       .map((numberChip) => NumberChipData.clone(numberChip))
-  //       .toList();
-  //   (await boxNumberChips).addAll(_savedListNumberChips);
-  //   _savedTimeSet.addListNumberChips(
-  //       (await boxNumberChips), _savedListNumberChips);
-  //
-  //   _savedTimeSet.save();
-  //   await loadTimeSet(title);
-  // }
 
   ///Calculation time_set's parameters
   TimeOfDay startSet() {
@@ -134,7 +95,6 @@ class TimeSetModule with ChangeNotifier {
   String titleTimeSet() {
     return _timeSetService.timeSet.title;
   }
-
 
   Future<void> changeStartTime(BuildContext context) async {
     final startTime = TimeOfDay.fromDateTime(_timeSetService.startTimeSet());
@@ -157,7 +117,8 @@ class TimeSetModule with ChangeNotifier {
       initialTime: const TimeOfDay(hour: 1, minute: 0),
     );
     _timeSetService.changeDuration(newValue);
-
+    _itemListService.changeDurationOfItems(_timeSet);
+    _itemListService.calculateStartTimeOfItems(_timeSet);
     //   // if (lastOpened != '') {
     //   //   timeSet.save();
     //   // }
@@ -174,18 +135,18 @@ class TimeSetModule with ChangeNotifier {
     if (newValue == null) {
       print('нет результата');
     } else {
-      final newFinish = DateTime(0,1,1, newValue.hour, newValue.minute);
+      final newFinish = DateTime(0, 1, 1, newValue.hour, newValue.minute);
       final condition = newFinish.isBefore(_timeSetService.startTimeSet());
-      if (condition){
+      if (condition) {
         showAlert(context);
+      } else {
+        _timeSetService.changeFinishTime(newValue);
+        _itemListService.changeDurationOfItems(_timeSet);
+        _itemListService.calculateStartTimeOfItems(_timeSet);
+        notifyListeners();
       }
-      else {
-            _timeSetService.changeFinishTime(newValue);
-            notifyListeners();
-          }
-      }
-
     }
+  }
 
   Future<void> showAlert(BuildContext context) {
     return showDialog(
@@ -204,8 +165,6 @@ class TimeSetModule with ChangeNotifier {
       ),
     );
   }
-
-
 
   ///Items operations
   Future<void> showDialogAddNumeralItems(context) {
@@ -405,7 +364,7 @@ class TimeSetModule with ChangeNotifier {
   // }
 
   void clearAllList(BuildContext context) async {
-   // _itemsTimeSet.clear();
+    // _itemsTimeSet.clear();
     // numberChips.clear();
     context.read<CounterModel>().startNumber = 1;
     // (await boxListOfItems).delete(timeSet.title);

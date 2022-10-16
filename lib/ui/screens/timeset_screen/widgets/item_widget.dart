@@ -161,10 +161,6 @@ class StartTime extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        // Text(
-        //   startTimeItem.format(context),
-        //   style: const TextStyle(fontSize: 16),
-        // ),
         Text(
           formatStartTime,
           style: const TextStyle(fontSize: 16),

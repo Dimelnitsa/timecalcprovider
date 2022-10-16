@@ -30,7 +30,7 @@ class _SaveSetDialogState extends State<SaveSetDialog> {
         ),
         TextButton(
           onPressed: () {
-           // context.read<TimeSetModule>().saveNewTimeSet(_controller.text);
+           context.read<TimeSetModule>().saveNewTimeSetAs(_controller.text);
             Navigator.pop(context);
           },
           child: const Text('Ok'),

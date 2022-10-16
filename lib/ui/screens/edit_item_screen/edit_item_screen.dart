@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../../repository/time_set.dart';
 import 'widgets/list_switchers_widget.dart';
 import '../../../repository/item.dart';
-import '../timeset_screen/time_set_model.dart';
 import 'edit_item_model.dart';
 import 'edited_item_widget.dart';
 import 'widgets/text_choice_chips_widget.dart';
@@ -13,18 +11,18 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class EditItemScreen extends StatelessWidget {
   final Item item;
-  const EditItemScreen({Key? key, required this.item}) : super(key: key);
+  const EditItemScreen({Key? key, required this.item,}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     ///TODO change _timeSet to real variable
-    final _timeSet = TimeSet(
-        title: 'Новый',
-        startHours: TimeOfDay.now().hour.toInt(),
-        startMinutes: TimeOfDay.now().minute.toInt(),
-        dateTimeSaved: DateTime.now());;
+    // final _timeSet = TimeSet(
+    //     title: 'Новый',
+    //     startHours: TimeOfDay.now().hour.toInt(),
+    //     startMinutes: TimeOfDay.now().minute.toInt(),
+    //     dateTimeSaved: DateTime.now());;
     return ChangeNotifierProvider(
-      create: (context) => EditItemModel(itemEdited: item, timeSet: _timeSet),
+      create: (context) => EditItemModel(itemEdited: item),
       child: const EditItemBody(),
     );
   }

@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:timecalcprovider/domain/data_provider/hive_manager.dart';
-import 'package:timecalcprovider/repository/number_chips_data.dart';
-import 'package:timecalcprovider/repository/time_set.dart';
+import '../../../domain/data_provider/hive_manager.dart';
+import '../../../repository/number_chips_data.dart';
 import '../../../repository/item.dart';
 import '../../../repository/text_choice_chip_data.dart';
 
 class EditItemModel extends ChangeNotifier {
   Item itemEdited;
-  TimeSet timeSet;
+  //TimeSet timeSet;
   String? titleItem;
   bool isVerse = false;
   bool isPicture = false;
@@ -22,7 +21,7 @@ class EditItemModel extends ChangeNotifier {
   List<NumberChipData> numberChips = [];
   late final Box<NumberChipData> numberChipsBox;
 
-  EditItemModel({required this.itemEdited, required this.timeSet}) {
+  EditItemModel({required this.itemEdited,}) {
     titleItem = itemEdited.titleItem;
     itemChips = itemEdited.chipsItem;
     isVerse = itemEdited.isVerse;
@@ -45,9 +44,10 @@ class EditItemModel extends ChangeNotifier {
     });
   }
 
-  void readTextChoiceChips() {
+  void readTextChoiceChips() async{
     textChoiceChips = textChipsBox.values.toList();
-    numberChips = timeSet.numberChips as List<NumberChipData>;
+    //numberChips = timeSet.numberChips as List<NumberChipData>;
+   // numberChips = await _numChipsService.getListOfNumberChips(timeSet);
     notifyListeners();
   }
 

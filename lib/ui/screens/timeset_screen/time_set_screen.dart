@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:timecalcprovider/navigation/navigation_routs.dart';
+import '../../../navigation/navigation_routs.dart';
 import '../dialogs_screen/save_set_dialog.dart';
 import '../drawer_screen/drawer_time_set_screen.dart';
 import 'widgets/fab_menu.dart';

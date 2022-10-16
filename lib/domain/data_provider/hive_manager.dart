@@ -15,7 +15,7 @@ class HiveManager{
       {required String nameBox}) async {
     registerAdapter(typeId: 0, typeAdapter: TimeSetInHiveAdapter());
     registerAdapter(typeId: 2, typeAdapter: ItemAdapter());
-    return Hive.openBox<T>(nameBox);
+    return await Hive.openBox<T>(nameBox);
   }
 
   void registerAdapter<E>({required int typeId,
@@ -36,8 +36,8 @@ class HiveManager{
   //   return Hive.openBox<List>('list_of_items_box');
   // }
 
-  Future<Box<TimeSet>> openTimeSetBox() {
-    return _openBox(nameBox: 'timeset_box');
+  Future<Box<TimeSet>> openTimeSetBox() async {
+    return await _openBox(nameBox: 'timeset_box');
   }
 
   Future<Box<Item>> openItemsBox() {
