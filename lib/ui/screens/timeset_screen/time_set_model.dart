@@ -16,8 +16,8 @@ class TimeSetModule with ChangeNotifier {
   var _timeSet;
   TimeSet get timeSet => _timeSet;
 
-  List<TimeSet> _listOfTimeSets = [];
-  List<TimeSet> get listOfTimeSets => _listOfTimeSets.toList();
+  List<TimeSet> _timeSetsList = [];
+  List<TimeSet> get listOfTimeSets => _timeSetsList.toList();
 
   final _itemListService = ItemListService();
   List<Item> _listOfItems = [];
@@ -38,7 +38,7 @@ class TimeSetModule with ChangeNotifier {
 
   Future<void> _initializationTimeSet() async {
     _lastSession = await _sessionService.getLastSession();
-    _listOfTimeSets = await _timeSetService.loadListOfTimeSets();
+    _timeSetsList = await _timeSetService.loadListOfTimeSets();
 
     if (_lastSession == null) {
       _lastSession = 'Новый';
@@ -64,15 +64,19 @@ class TimeSetModule with ChangeNotifier {
     ///1. save  Time Set in Hive
     await _timeSetService.saveNewTimeSet(title);
     _timeSet = await _timeSetService.loadTimeSet(title);
-    _listOfTimeSets = await _timeSetService.loadListOfTimeSets();
+    _timeSetsList = await _timeSetService.loadListOfTimeSets();
     ///2. save listItems as HiveList of Time Set in Hive
-    await _itemListService.saveListOfItemsForNewTimeSet(_timeSet);
+    await _itemListService.saveListOfItemsForNewTimeSet(_timeSet, _listOfItems);
     ///4, save list of NumberChips in Hive
     await _numChipsService.saveListOfNumberChips(_timeSet);
     ///6. save savedTimeSet
      _timeSetService.saveChangesTimeSet();
     ///7. open saved Time Set as current
     await loadTimeSet(title);
+    // _itemListService.changeDurationOfItems(_timeSet);
+    // _itemListService.calculateStartTimeInListItems(timeSet: timeSet);
+    _itemListService.updateListItems(timeSet);
+    notifyListeners();
   }
 
   ///Calculation time_set's parameters
@@ -102,7 +106,8 @@ class TimeSetModule with ChangeNotifier {
       startTime;
     } else {
        _timeSetService.changeStartTimeSet(newValue);
-      _itemListService.calculateStartTimeInListItems(timeSet: timeSet);
+      //_itemListService.calculateStartTimeInListItems(timeSet: timeSet);
+    _itemListService.updateListItems(timeSet);
     }
     notifyListeners();
   }
@@ -114,9 +119,9 @@ class TimeSetModule with ChangeNotifier {
     );
     _timeSetService.changeDuration(newValue);
     //пересчет продолжительности item
-    _itemListService.changeDurationOfItems(_timeSet);
-    _itemListService.calculateStartTimeInListItems(timeSet: timeSet);
-    //_itemListService.calculateStartTimeOfItems(_timeSet.startHours, _timeSet.startMinutes);
+    // _itemListService.changeDurationOfItems(_timeSet);
+    // _itemListService.calculateStartTimeInListItems(timeSet: timeSet);
+    _itemListService.updateListItems(timeSet);
     notifyListeners();
   }
 
@@ -137,8 +142,9 @@ class TimeSetModule with ChangeNotifier {
         _timeSetService.changeFinishTime(newValue);
         // _itemListService.changeDurationOfItems(_timeSet);
         // _itemListService.calculateStartTimeOfItems(_timeSet.startHours, _timeSet.startMinutes);
-        _itemListService.changeDurationOfItems(_timeSet);
-        _itemListService.calculateStartTimeInListItems(timeSet: timeSet);
+        // _itemListService.changeDurationOfItems(_timeSet);
+        // _itemListService.calculateStartTimeInListItems(timeSet: timeSet);
+        _itemListService.updateListItems(timeSet);
         notifyListeners();
       }
     }

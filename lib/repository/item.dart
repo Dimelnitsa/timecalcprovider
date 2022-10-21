@@ -49,8 +49,8 @@ class Item extends HiveObject {
         startTimeItemHours: item.startTimeItemHours,
         startTimeItemMinutes: item.startTimeItemMinutes,
         startTimeItemSeconds: item.startTimeItemSeconds,
-        isPicture: item.isPicture = false,
-        isVerse: item.isVerse = false,
-        isTable: item.isTable = false);
+        isPicture: item.isPicture,
+        isVerse: item.isVerse,
+        isTable: item.isTable);
   }
 }

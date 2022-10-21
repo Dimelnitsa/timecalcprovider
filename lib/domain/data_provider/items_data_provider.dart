@@ -12,9 +12,9 @@ class ItemsDataProvider {
     return timeSet.items;
   }
 
-  Future<void> addItemListAsHiveList(TimeSet timeSet, List<Item> listItems)async{
-    timeSet.addItems((await _boxOfItems), listItems);
-  }
+  // Future<void> addItemListAsHiveList(TimeSet timeSet, List<Item> listItems)async{
+  //   timeSet.addItems((await _boxOfItems), listItems);
+  // }
 
   Future<void> addItemAsHiveList(TimeSet timeSet, Item item)async{
     timeSet.addItem((await _boxOfItems), item);
@@ -42,9 +42,10 @@ class ItemsDataProvider {
     await item.save();
   }
 
-  Future<void> saveListOfItemsInHive(List<Item> listItems) async {
+  Future<void> saveListOfItemsInHive(TimeSet timeSet, List<Item> listItems) async {
     final savedListParts = listItems.map((item) => Item.clone(item)).toList();
     (await _boxOfItems).addAll(savedListParts);
+    timeSet.addItems((await _boxOfItems), savedListParts);
   }
 
   Future<void> deleteItemFromList(TimeSet timeSet, int keyOfTimeSet) async {
