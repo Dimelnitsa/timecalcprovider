@@ -5,7 +5,7 @@ import 'widgets/text_input_field_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class NewItemScreen extends StatelessWidget {
-  const NewItemScreen({Key? key}) : super(key: key);
+   const NewItemScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +68,7 @@ class NewItemBody extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-        // context.read<NewItemModel>().saveItem(context);
+         context.read<NewItemModel>().saveItem(context);
         },
         child: const Icon(Icons.save),
       ),

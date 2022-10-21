@@ -15,12 +15,19 @@ class NumChipsService{
       _numberChips = (await _numChipsDataProvider.loadItemsFromHive(timeSet))!;
       return _numberChips;
     }
-
   }
 
   Future<void> saveListOfNumberChips(TimeSet timeSet)async{
     await _numChipsDataProvider.saveListNumberChipsInHive(_numberChips);
     await _numChipsDataProvider.addListNumberChipsAsHiveList(timeSet, _numberChips);
+  }
+
+  void deleteListOfNumberChips(TimeSet timeSet){
+    _numChipsDataProvider.deleteListOfNumberChipsInHive(timeSet);
+  }
+
+  Future<void> closeBoxOfNumberChips() async {
+    await _numChipsDataProvider.closeBoxOfNumberChips();
   }
 
 }

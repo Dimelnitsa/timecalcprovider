@@ -29,8 +29,10 @@ class TimeSetDataProvider {
     (await _boxTimeSet).put(id, savedTimeSet);
   }
 
-  Future<void> saveChangesOfTimeSetInHive(TimeSet timeSet) async {
-    await timeSet.save();
+  void saveChangesOfTimeSetInHive(TimeSet timeSet) {
+     timeSet.save();
   }
+
+
 
 }

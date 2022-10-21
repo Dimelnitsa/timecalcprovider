@@ -141,7 +141,7 @@ class _NumeralItemDialogState extends State<NumeralItemDialog> {
           elevation: 5.0,
           child: Text(AppLocalizations.of(context)!.ok),
           onPressed: () {
-            context.read<TimeSetModule>().addListItems(counter, startNumber);
+            context.read<TimeSetModule>().addItemsInList(counter, startNumber);
             _modelRead.startNumber = startNumber + counter;
 
             Navigator.of(context).pop();

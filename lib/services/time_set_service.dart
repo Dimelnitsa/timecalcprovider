@@ -5,19 +5,18 @@ import '../domain/data_provider/time_set_data_provider.dart';
 import '../repository/time_set.dart';
 
 class TimeSetService {
-
-  var _timeSet= TimeSet(
+  var _timeSet = TimeSet(
       title: 'Новый',
       startHours: TimeOfDay.now().hour.toInt(),
       startMinutes: TimeOfDay.now().minute.toInt(),
       dateTimeSaved: DateTime.now());
   TimeSet get timeSet => _timeSet;
-  final _timeSetDataProvider = TimeSetDataProvider();
 
+  final _timeSetDataProvider = TimeSetDataProvider();
   final _sessionService = SessionService();
 
   Future<TimeSet> loadTimeSet(String keyOfTimeSet) async {
-    if ((await _timeSetDataProvider.getTimeSetFromHive(keyOfTimeSet)) == null){
+    if ((await _timeSetDataProvider.getTimeSetFromHive(keyOfTimeSet)) == null) {
       _sessionService.saveLastSession(_timeSet.title);
       return _timeSet;
     } else {
@@ -25,14 +24,13 @@ class TimeSetService {
       _sessionService.saveLastSession(_timeSet.title);
       return _timeSet;
     }
-
   }
 
-  Future<List<TimeSet>> loadListOfTimeSets()async {
+  Future<List<TimeSet>> loadListOfTimeSets() async {
     return await _timeSetDataProvider.listOTimeSetsFromHive();
   }
 
-  Future<void> saveChangesTimeSet()async{
+  void saveChangesTimeSet() {
     _timeSetDataProvider.saveChangesOfTimeSetInHive(timeSet);
   }
 
@@ -47,31 +45,18 @@ class TimeSetService {
     _timeSetDataProvider.saveTimeSetInHive(title, _savedTimeSet);
   }
 
-  Future<void> closeHive() async {
+  Future<void> closeTimeSetHiveBox() async {
     await _timeSetDataProvider.closeBoxTimeSet();
   }
-
 
   ///Start time of Time Set
   DateTime startTimeSet() =>
       DateTime(0, 1, 1, _timeSet.startHours, _timeSet.startMinutes);
 
-  Future<void> changeStartTimeSet(TimeOfDay newValue) async {
+  void changeStartTimeSet(TimeOfDay newValue) {
     _timeSet.startHours = newValue.hour;
     _timeSet.startMinutes = newValue.minute;
-    await _timeSetDataProvider.saveChangesOfTimeSetInHive(_timeSet);
-
-
-    //   calculateStartTimeOfItems(_itemsTimeSet.length);
-    //
   }
-
-  // String startHhMm (){
-  //   return DateFormat('HH:mm').format(startTimeSet());
-  // }
-  // String startHhMmSs (){
-  //   return DateFormat('HH:mm:ss').format(startTimeSet());
-  // }
 
   /// Duration of Time Set
   Duration durationTimeSet() {
@@ -95,34 +80,8 @@ class TimeSetService {
     return startTimeSet().add(durationTimeSet());
   }
 
-  // String finishFormatHhMm (){
-  //   return DateFormat('HH:mm').format(finishTimeSet ());
-  // }
-  // String finishHhMmSs (){
-  //   return DateFormat('HH:mm:ss').format(finishTimeSet ());
-  // }
-
   void changeFinishTime(TimeOfDay newValue) {
-    // new duration определяются исходя из нового finishTime
-
-        timeSet.hoursDuration = newValue.hour - startTimeSet().hour;
-        timeSet.minutesDuration = newValue.minute - startTimeSet().minute;
-      //  _itemListService.changeDurationOfItems(_timeSet);
-  //   if (newTime == null) {
-  //     // значение hoursDuration  minutesDuration определяются исходя из предыдущей finishTime
-  //     timeSet.hoursDuration = finishTime().hour - startTimeOfSet(timeSet).hour;
-  //     timeSet.minutesDuration =
-  //         finishTime().minute - startTimeOfSet(timeSet).minute;
-  //   } else {
-  //     // hoursDuration  minutesDuration определяются исходя из нового finishTime
-  //     timeSet.hoursDuration = newTime.hour - startTimeOfSet(timeSet).hour;
-  //     timeSet.minutesDuration = newTime.minute - startTimeOfSet(timeSet).minute;
-  //   }
-  //   if (lastOpened != '') {
-  //     timeSet.save();
-  //   }
-  //   calculateStartTimeOfItems(_itemsTimeSet.length);
-
+    timeSet.hoursDuration = newValue.hour - startTimeSet().hour;
+    timeSet.minutesDuration = newValue.minute - startTimeSet().minute;
   }
-
 }

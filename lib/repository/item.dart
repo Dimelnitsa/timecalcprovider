@@ -12,7 +12,6 @@ class Item extends HiveObject {
 
   @HiveField(9)
   int durationHours = 0;
-
   @HiveField(2)
   int durationInMinutes = 0;
   @HiveField(3)

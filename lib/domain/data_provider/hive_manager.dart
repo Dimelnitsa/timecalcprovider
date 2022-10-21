@@ -1,5 +1,5 @@
 import 'package:hive/hive.dart';
-import 'package:timecalcprovider/repository/number_chips_data.dart';
+import '../../repository/number_chips_data.dart';
 import '../../repository/item.dart';
 import '../../repository/text_choice_chip_data.dart';
 import '../../repository/time_set.dart';
@@ -40,9 +40,9 @@ class HiveManager{
     return await _openBox(nameBox: 'timeset_box');
   }
 
-  Future<Box<Item>> openItemsBox() {
+  Future<Box<Item>> openItemsBox() async {
     registerAdapter(typeId: 2, typeAdapter: ItemAdapter());
-    return Hive.openBox<Item>('items_box');
+    return await Hive.openBox<Item>('items_box');
   }
 
   Future<Box<TextChoiceChipData>> TextChoiceChipsBox() {

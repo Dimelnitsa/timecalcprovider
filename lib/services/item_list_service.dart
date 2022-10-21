@@ -1,40 +1,37 @@
+
 import '../domain/data_provider/items_data_provider.dart';
 import '../repository/item.dart';
 import '../repository/time_set.dart';
+import 'time_set_calculator.dart';
 
 class ItemListService {
+  final _itemsDataProvider = ItemsDataProvider();
+  TimeSetCalculator _timeSetCalculator = TimeSetCalculator();
+
   List<Item> _items = [];
   List<Item> get items => _items;
   DateTime _averageDurationOfItem = DateTime(0, 1, 1, 1, 0, 0);
 
-  final _itemsDataProvider = ItemsDataProvider();
-
-  Future<List<Item>> getListOfItems(TimeSet timeSet) async {
-    if ((await _itemsDataProvider.loadItemsFromHive(timeSet)) == null) {
+  List<Item> getListOfItems(TimeSet timeSet) {
+    if ((_itemsDataProvider.loadItemsFromHive(timeSet)) == null) {
       return _items;
     } else {
-      _items = (await _itemsDataProvider.loadItemsFromHive(timeSet))!;
+      _items = (_itemsDataProvider.loadItemsFromHive(timeSet))!;
       return _items;
     }
   }
 
   /// calculation start time of items
-  void calculateStartTimeOfItems(TimeSet timeSet) {
-    DateTime startDateTimeOfItem =
-        DateTime(0, 1, 1, timeSet.startHours, timeSet.startMinutes, 0);
+  void calculateStartTimeInListItems(
+      {required TimeSet timeSet})  {
+    DateTime startTimeOfItem = DateTime(0, 1, 1, timeSet.startHours, timeSet.startMinutes, 0);
+    timeSet.items?.forEach((item) {
+      _timeSetCalculator.setItemStartTime(item: item, startTime: startTimeOfItem);
+      startTimeOfItem = _timeSetCalculator.addItemDuration(item: item, startTime: startTimeOfItem) ;
+      item.save();
+      timeSet.save();
 
-    int countOfItems = _items.length;
-    for (int i = 0; i < countOfItems; i++) {
-      final durationOfItemInMinutes = timeSet.items![i].durationInMinutes;
-      final durationOfItemInSeconds = timeSet.items![i].durationInSeconds;
-      final durationOfItem = Duration(
-          minutes: durationOfItemInMinutes, seconds: durationOfItemInSeconds);
-
-      setItemStartTime(timeSet.items![i], startDateTimeOfItem);
-      _itemsDataProvider.saveChangesItemInHive(timeSet.items![i]);
-
-      startDateTimeOfItem = startDateTimeOfItem.add(durationOfItem);
-    }
+    });
   }
 
   void setItemStartTime(Item item, DateTime startTime) {
@@ -43,69 +40,62 @@ class ItemListService {
     item.startTimeItemSeconds = startTime.second;
   }
 
-  ///Duration Calculations
-  void _calcAverageDurationOfItem(TimeSet timeSet) {
-    final durationTimeSet = Duration(
-        hours: timeSet.hoursDuration, minutes: timeSet.minutesDuration);
-    final countOfItems = _items.length;
-
-    var durationOfItemInMinutes = durationTimeSet.inMinutes;
-    double averageDurationOfItemInMinutes =
-        durationOfItemInMinutes / countOfItems;
-    _averageDurationOfItem =
-        _dateTimeFormatDurationInMinutes(averageDurationOfItemInMinutes);
-
-    //saveAverageDurationOfItem(countOfItems,durationOfItemHours, durationOfItemMinutes, durationOfItemSeconds);
+  void addListItems(int counter, int startNumber, TimeSet timeSet) {
+    //запуск цикла добавления items в список TimeSet
+    for (int i = 0; i < counter; i++) {
+      Item item = Item(
+          titleItem: '',
+          chipsItem: <String>[startNumber.toString()],
+          startTimeItemHours: timeSet.startHours,
+          startTimeItemMinutes: timeSet.startMinutes,
+          startTimeItemSeconds: 0,
+          isVerse: false,
+          isPicture: false,
+          isTable: false);
+      addItemInListTimeSet(timeSet, item);
+      startNumber =  startNumber+1   ;
+    }
   }
 
-  DateTime _dateTimeFormatDurationInMinutes(double minutes) {
-    var convertInHours = minutes / 60;
-    int durationOfItemHours = convertInHours.floor();
-    int durationOfItemMinutes = minutes.floor();
-    int durationOfItemSeconds =
-        ((minutes - durationOfItemMinutes) * 60).round();
-    return DateTime(0, 1, 1, durationOfItemHours, durationOfItemMinutes,
-        durationOfItemSeconds);
+  void addItemInListTimeSet(
+      TimeSet timeSet, Item item) async {
+    await addItemInTimeSet(timeSet, item);//добавляем item в timeSet HiveList itemList
+    changeDurationOfItems(timeSet); //пересчитываем среднюю продолжительность item
+    calculateStartTimeInListItems(timeSet: timeSet); //пересчитываем новый startTime of item
+    ///TODO adding number chips
+    //     // await addNumberChipsInHive(startNumber);
   }
-
-  void setupDurationForItem(Item item, DateTime duration) {
-    item.durationHours = duration.hour;
-    item.durationInMinutes = duration.minute;
-    item.durationInSeconds = duration.second;
-  }
-
-  // void _setAverageDurationOfItem(TimeSet timeSet){
-  //   _items.forEach((item) {
-  //     setupDurationForItem(item, _averageDurationOfItem);
-  //     timeSet.save();
-  //     item.save();
-  //   });
-  //for (int i = 0; i < countOfItems; i++) {
-  //     // if (lastOpened != '') {
-  //     //   // если расчет делается не впервые
-  //     //   if (timeSet.items != null) {
-  //     //     timeSet.items![i].durationHours = durationOfItemHours;
-  //     //     timeSet.items![i].durationInMinutes = durationOfItemMinutes;
-  //     //     timeSet.items![i].durationInSeconds = durationOfItemSeconds;
-  //     //     timeSet.save();
-  //     //     timeSet.items![i].save();
-  //     //   }
-  //     // } else {
-  //     //   _itemsTimeSet[i].durationHours = durationOfItemHours;
-  //     //   _itemsTimeSet[i].durationInMinutes = durationOfItemMinutes;
-  //     //   _itemsTimeSet[i].durationInSeconds = durationOfItemSeconds;
-  //     // }
-  //   }
-  // }
 
   void changeDurationOfItems(TimeSet timeSet) {
-    _calcAverageDurationOfItem(timeSet);
-    _itemsDataProvider.setAverageDurationOfItem(
-        timeSet, _averageDurationOfItem);
+    //вычисляем среднюю продолжительность item
+    _averageDurationOfItem = _timeSetCalculator.calcAverageDurationOfItem(timeSet);
+    // присваиваем среднюю продолжительность averageDuration для item
+    _items.forEach((item) {_itemsDataProvider.setupDurationForItem(item, _averageDurationOfItem); });
   }
 
-  Future<void> saveListOfItems(TimeSet timeSet) async {
+  Future<void> saveListOfItemsForNewTimeSet(TimeSet timeSet) async {
     await _itemsDataProvider.saveListOfItemsInHive(_items);
     await _itemsDataProvider.addItemListAsHiveList(timeSet, _items);
+  }
+
+  Future<void> addItemInTimeSet(TimeSet timeSet, Item item) async {
+    await _itemsDataProvider.addItemInHiveBox(item);
+    await _itemsDataProvider.addItemAsHiveList(timeSet, item);
+    item.save();
+    timeSet.save();
+    ///TODO adding number chips
+    // await addNumberChipsInHive(startNumber);
+  }
+
+  void deleteItemFromList(TimeSet timeSet, int keyOfTimeSet) async {
+    await _itemsDataProvider.deleteItemFromList(timeSet, keyOfTimeSet);
+  }
+
+  void deleteListOfItems(TimeSet timeSet) {
+    _itemsDataProvider.deleteListOfItems(timeSet);
+  }
+
+  Future<void> closeTimeSetHiveBox() async {
+    await _itemsDataProvider.closeBoxOfItems();
   }
 }

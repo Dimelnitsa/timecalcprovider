@@ -13,7 +13,7 @@ class ListOfItems extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final items = context.read<TimeSetModule>().listOfItems;
+    final items = context.watch<TimeSetModule>().listOfItems;
     return NotificationListener<UserScrollNotification>(
       onNotification: (notification) {
         if (notification.direction == ScrollDirection.forward) {
@@ -29,7 +29,7 @@ class ListOfItems extends StatelessWidget {
       child: const CustomScrollView(
         slivers: [
           SliverAppBar(
-            expandedHeight: 64.0,
+            expandedHeight: 56.0,
             flexibleSpace: TimeSetupPanel(),
             backgroundColor: Colors.white,
             floating: true,
@@ -70,7 +70,6 @@ class _ListOfItemWidgetsState extends State<ListOfItemWidgets> {
                 child: ItemWidget(
                     index: index)),
             onTap: () {
-              // context.read<TimeSetModule>().showEditItemDialog(context, item);
               Navigator.push(
                   context,
                   MaterialPageRoute(

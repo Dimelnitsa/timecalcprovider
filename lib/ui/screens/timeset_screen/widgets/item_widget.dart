@@ -38,7 +38,7 @@ class ItemWidget extends StatelessWidget {
                   .toList(),
             ),
             if (item.isPicture) IsPictureButton(item: item),
-            if (item.isVerse) IsVerceButton(item: item),
+            if (item.isVerse) IsVerseButton(item: item),
             if (item.isTable) IsTableButton(item: item),
           ],
         ),
@@ -217,8 +217,8 @@ class IsTableButton extends StatelessWidget {
   }
 }
 
-class IsVerceButton extends StatelessWidget {
-  const IsVerceButton({
+class IsVerseButton extends StatelessWidget {
+  const IsVerseButton({
     Key? key,
     required this.item,
   }) : super(key: key);
