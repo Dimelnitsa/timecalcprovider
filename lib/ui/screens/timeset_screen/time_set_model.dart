@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../services/num_chips_service.dart';
@@ -59,18 +58,21 @@ class TimeSetModule with ChangeNotifier {
     notifyListeners();
   }
 
-
   Future<void> saveNewTimeSetAs(String title) async {
     ///1. save  Time Set in Hive
     await _timeSetService.saveNewTimeSet(title);
     _timeSet = await _timeSetService.loadTimeSet(title);
     _timeSetsList = await _timeSetService.loadListOfTimeSets();
+
     ///2. save listItems as HiveList of Time Set in Hive
     await _itemListService.saveListOfItemsForNewTimeSet(_timeSet, _listOfItems);
+
     ///4, save list of NumberChips in Hive
     await _numChipsService.saveListOfNumberChips(_timeSet);
+
     ///6. save savedTimeSet
-     _timeSetService.saveChangesTimeSet();
+    _timeSetService.saveChangesTimeSet();
+
     ///7. open saved Time Set as current
     await loadTimeSet(title);
     // _itemListService.changeDurationOfItems(_timeSet);
@@ -105,9 +107,9 @@ class TimeSetModule with ChangeNotifier {
     if (newValue == null) {
       startTime;
     } else {
-       _timeSetService.changeStartTimeSet(newValue);
+      _timeSetService.changeStartTimeSet(newValue);
       //_itemListService.calculateStartTimeInListItems(timeSet: timeSet);
-    _itemListService.updateListItems(timeSet);
+      _itemListService.updateListItems(timeSet);
     }
     notifyListeners();
   }
@@ -209,7 +211,6 @@ class TimeSetModule with ChangeNotifier {
     notifyListeners();
   }
 
-
   // Future<void> addNumberChipsInHive(int startNumber) async {
   //   final numberChipData =
   //       NumberChipData(number: startNumber, isSelected: false);
@@ -225,67 +226,65 @@ class TimeSetModule with ChangeNotifier {
   //   }
   // }
 
-  void addNewItem( {
-      required String titleItem,
-      required List<String> chipsItem,
-      required bool isVerse,
-      required bool isPicture,
-      required bool isTable,
-    }) async {
-      Item item = Item(
-          titleItem: titleItem,
-          chipsItem: chipsItem,
-          startTimeItemHours: 0,
-          startTimeItemMinutes: 0,
-          startTimeItemSeconds: 0,
-          isVerse: isVerse,
-          isPicture: isPicture,
-          isTable: isTable);
+  void addNewItem({
+    required String titleItem,
+    required List<String> chipsItem,
+    //required int startTimeItemHours,
+    //required int startTimeItemMinutes,
+    // required int startTimeItemSeconds,
+    required bool isVerse,
+    required bool isPicture,
+    required bool isTable,
+  }) async {
+    Item item = Item(
+        titleItem: titleItem,
+        chipsItem: chipsItem,
+        startTimeItemHours: 0, //startTimeItemHours,
+        startTimeItemMinutes: 0, //startTimeItemMinutes,
+        startTimeItemSeconds: 0, //startTimeItemSeconds,
+        isVerse: isVerse,
+        isPicture: isPicture,
+        isTable: isTable);
 
-      _itemListService.addItemInListTimeSet(_timeSet, item);
-      notifyListeners();
+    _itemListService.addItemInListTimeSet(_timeSet, item);
+    notifyListeners();
   }
 
-
-
   void insertItemAbove(int itemIndex) async {
-    //   Item item = Item(
-    //       titleItem: '',
-    //       chipsItem: [],
-    //       startTimeItemHours: 0,
-    //       startTimeItemMinutes: 0,
-    //       startTimeItemSeconds: 0,
-    //       isVerse: false,
-    //       isPicture: false,
-    //       isTable: false);
-    //
-    //  // (await boxOfItems).add(item);
-    //   _itemsTimeSet.insert(itemIndex, item);
-    //   // timeSet.save();
-    //   calculateAverageDurationOfItem(_itemsTimeSet.length);
-    //   calculateStartTimeOfItems(_itemsTimeSet.length);
-    //   notifyListeners();
+    Item item = Item(
+        titleItem: '',
+        chipsItem: [],
+        startTimeItemHours: 0,
+        startTimeItemMinutes: 0,
+        startTimeItemSeconds: 0,
+        isVerse: false,
+        isPicture: false,
+        isTable: false);
+    _itemListService.addItemInTimeSet(
+        timeSet, item); // (await boxOfItems).add(item);
+    _itemListService.insertItem(timeSet, item, itemIndex);
+    _timeSetService.saveChangesTimeSet();
+    //_itemListService.updateListItems(timeSet);
+    notifyListeners();
   }
 
   void insertItemUnder(int itemIndex) async {
-    //   Item item = Item(
-    //       titleItem: '',
-    //       chipsItem: [],
-    //       startTimeItemHours: 0,
-    //       startTimeItemMinutes: 0,
-    //       startTimeItemSeconds: 0,
-    //       isVerse: false,
-    //       isPicture: false,
-    //       isTable: false);
-    //
-    //  // (await boxOfItems).add(item);
-    //   _itemsTimeSet.insert(itemIndex + 1, item);
-    //   // timeSet.save();
-    //   calculateAverageDurationOfItem(_itemsTimeSet.length);
-    //   calculateStartTimeOfItems(_itemsTimeSet.length);
-    //   notifyListeners();
+    Item item = Item(
+        titleItem: '',
+        chipsItem: [],
+        startTimeItemHours: 0,
+        startTimeItemMinutes: 0,
+        startTimeItemSeconds: 0,
+        isVerse: false,
+        isPicture: false,
+        isTable: false);
+    _itemListService.addItemInTimeSet(
+        timeSet, item); // (await boxOfItems).add(item);
+    _itemListService.insertItem(timeSet, item, itemIndex + 1);
+    _timeSetService.saveChangesTimeSet();
+    _itemListService.updateListItems(timeSet);
+    notifyListeners();
   }
-
 
   void clearAllList(BuildContext context) async {
     _itemListService.deleteListOfItems(timeSet);
@@ -295,19 +294,21 @@ class TimeSetModule with ChangeNotifier {
   }
 
   void deleteTimeSet(String keyOfTimeSet) async {
-    //   var _deleteTimeSet = (await boxTimeSet).get(keyOfTimeSet);
-    //   _deleteTimeSet?.items?.deleteAllFromHive();
-    //   (await boxOfItems).compact();
+    var _deleteTimeSet = await _timeSetService
+        .loadTimeSet(keyOfTimeSet); //(await boxTimeSet).get(keyOfTimeSet);
+    _itemListService.deleteListOfItems(
+        _deleteTimeSet); //  _deleteTimeSet?.items?.deleteAllFromHive();
     //   _deleteTimeSet?.numberChips?.deleteAllFromHive();
     //   (await boxNumberChips).compact();
-    //   _deleteTimeSet?.delete();
-    //   (await boxTimeSet).compact();
+    await _timeSetService
+        .deleteTimeSet(_deleteTimeSet); //   _deleteTimeSet?.delete();
+    _timeSetsList = await _timeSetService.loadListOfTimeSets();
+    notifyListeners();
   }
 
   void deleteItemFromList(int keyOfTimeSet) async {
     _itemListService.deleteItemFromList(timeSet, keyOfTimeSet);
-    _itemListService.changeDurationOfItems(timeSet);
-    _itemListService.calculateStartTimeInListItems(timeSet: timeSet);
+    _itemListService.updateListItems(timeSet);
     notifyListeners();
   }
 
@@ -337,6 +338,5 @@ class TimeSetModule with ChangeNotifier {
     await _timeSetService.closeTimeSetHiveBox();
     await _itemListService.closeTimeSetHiveBox();
     await _numChipsService.closeBoxOfNumberChips();
-
   }
 }

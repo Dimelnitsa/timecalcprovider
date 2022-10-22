@@ -12,15 +12,16 @@ class ItemsDataProvider {
     return timeSet.items;
   }
 
-  // Future<void> addItemListAsHiveList(TimeSet timeSet, List<Item> listItems)async{
-  //   timeSet.addItems((await _boxOfItems), listItems);
-  // }
 
   Future<void> addItemAsHiveList(TimeSet timeSet, Item item)async{
     timeSet.addItem((await _boxOfItems), item);
   }
 
-  Future<void> addItemInHiveBox(Item item)async{
+  Future<void> insertItemInHiveList(TimeSet timeSet, Item item, int index)async{
+    timeSet.items?.insert(index, item);
+  }
+
+  Future<void> addItemInItemsHiveBox(Item item)async{
     (await _boxOfItems).add(item);
   }
 
@@ -54,6 +55,7 @@ class ItemsDataProvider {
 
   Future<void> deleteListOfItems(TimeSet timeSet)async{
     await timeSet.items?.deleteAllFromHive();
+    (await _boxOfItems).compact();
   }
 
   Future<void> closeBoxOfItems() async {

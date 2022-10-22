@@ -84,4 +84,8 @@ class TimeSetService {
     timeSet.hoursDuration = newValue.hour - startTimeSet().hour;
     timeSet.minutesDuration = newValue.minute - startTimeSet().minute;
   }
+
+  Future<void> deleteTimeSet(TimeSet timeSet)async{
+    await _timeSetDataProvider.deleteTimeSetFromHive(timeSet);
+      }
 }

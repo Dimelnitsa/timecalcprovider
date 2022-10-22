@@ -7,32 +7,24 @@ import 'time_set_calculator.dart';
 class ItemListService {
   final _itemsDataProvider = ItemsDataProvider();
   TimeSetCalculator _timeSetCalculator = TimeSetCalculator();
-
-  // List<Item> _items = [];
-  // List<Item> get items => _items;
   DateTime _averageDurationOfItem = DateTime(0, 1, 1, 1, 0, 0);
 
   List<Item> getListOfItems(TimeSet timeSet) {
     if ((_itemsDataProvider.loadItemsFromHive(timeSet)) == null) {
-      //return _items;
       return [];
     } else {
       return (_itemsDataProvider.loadItemsFromHive(timeSet))!;
-      //_items = (_itemsDataProvider.loadItemsFromHive(timeSet))!;
-      // return _items;
     }
   }
 
   /// calculation start time of items
-  void calculateStartTimeInListItems(
-      {required TimeSet timeSet})  {
+  void calculateStartTimeInListItems({required TimeSet timeSet})  {
     DateTime startTimeOfItem = DateTime(0, 1, 1, timeSet.startHours, timeSet.startMinutes, 0);
     timeSet.items?.forEach((item) {
       _timeSetCalculator.setItemStartTime(item: item, startTime: startTimeOfItem);
-      startTimeOfItem = _timeSetCalculator.addItemDuration(item: item, startTime: startTimeOfItem) ;
-      item.save();
+      startTimeOfItem = _timeSetCalculator.addItemDuration(item: item, startTime: startTimeOfItem);
+      _itemsDataProvider.saveChangesItemInHive(item);
       timeSet.save();
-
     });
   }
 
@@ -62,8 +54,6 @@ class ItemListService {
   void addItemInListTimeSet(
       TimeSet timeSet, Item item) async {
     await addItemInTimeSet(timeSet, item);//добавляем item в timeSet HiveList itemList
-    //changeDurationOfItems(timeSet); //пересчитываем среднюю продолжительность item
-    //calculateStartTimeInListItems(timeSet: timeSet); //пересчитываем новый startTime of item
     updateListItems(timeSet);
     ///TODO adding number chips
     //     // await addNumberChipsInHive(startNumber);
@@ -83,16 +73,24 @@ class ItemListService {
 
   Future<void> saveListOfItemsForNewTimeSet(TimeSet timeSet, List<Item> items) async {
     await _itemsDataProvider.saveListOfItemsInHive(timeSet, items);
-    //await _itemsDataProvider.addItemListAsHiveList(timeSet, _items);
   }
 
   Future<void> addItemInTimeSet(TimeSet timeSet, Item item) async {
-    await _itemsDataProvider.addItemInHiveBox(item);
+    await _itemsDataProvider.addItemInItemsHiveBox(item);
     await _itemsDataProvider.addItemAsHiveList(timeSet, item);
-    item.save();
+    _itemsDataProvider.saveChangesItemInHive(item);
     timeSet.save();
     ///TODO adding number chips
     // await addNumberChipsInHive(startNumber);
+  }
+
+  void insertItem(TimeSet timeSet, Item item, int index)async{
+    final addingItem = Item.clone(item);
+    await _itemsDataProvider.addItemInItemsHiveBox(addingItem);
+     await _itemsDataProvider.insertItemInHiveList(timeSet, addingItem, index);
+    _itemsDataProvider.saveChangesItemInHive(addingItem);
+     //addingItem.save();
+    updateListItems(timeSet);
   }
 
   void deleteItemFromList(TimeSet timeSet, int keyOfTimeSet) async {

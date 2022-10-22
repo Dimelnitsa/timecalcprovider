@@ -41,26 +41,26 @@ class TimeSetItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _timeSetItem = context.watch<TimeSetModule>().listOfTimeSets[indexInList];
+    final _timeSet = context.watch<TimeSetModule>().listOfTimeSets[indexInList];
    // final _lastOpenedTimeSet = context.select((TimeSetModule module) => module.lastOpened);
     final startTimeSet = TimeOfDay(
-        hour: _timeSetItem.startHours, minute: _timeSetItem.startMinutes);
+        hour: _timeSet.startHours, minute: _timeSet.startMinutes);
 
     return Container(
-     // color: (_timeSetItem.title == _lastOpenedTimeSet) ? Colors.blueGrey[100] : null,
+     // color: (_timeSet.title == _lastOpenedTimeSet) ? Colors.blueGrey[100] : null,
       child: ListTile(
-        title: Text(_timeSetItem.title),
+        title: Text(_timeSet.title),
         subtitle: Text(
             'Start: ${startTimeSet.format(context)}/'
-                ' Duration: ${_timeSetItem.hoursDuration}:${_timeSetItem.minutesDuration}'),
+                ' Duration: ${_timeSet.hoursDuration}:${_timeSet.minutesDuration}'),
         onTap: () {
-          context.read<TimeSetModule>().loadTimeSet(_timeSetItem.title);
+          context.read<TimeSetModule>().loadTimeSet(_timeSet.title);
           Navigator.pop(context);
         },
         trailing: IconButton(
           icon: const Icon(Icons.delete),
           onPressed: () {
-            // context.read<TimeSetModule>().deleteTimeSet(_timeSetItem.title);
+             context.read<TimeSetModule>().deleteTimeSet(_timeSet.title);
           },
         ),
       ),

@@ -33,6 +33,11 @@ class TimeSetDataProvider {
      timeSet.save();
   }
 
+  Future<void> deleteTimeSetFromHive(TimeSet timeSet)async{
+    await timeSet.delete();
+    (await _boxTimeSet).compact();
+  }
+
 
 
 }
