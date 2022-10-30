@@ -12,7 +12,7 @@ class ItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final item = context.watch<TimeSetModule>().listOfItems[index];
+    final item = context.watch<TimeSetModule>().items[index];
     return Container(
       margin: const EdgeInsets.only(left: 5.0, right: 5.0, bottom: 5.0),
       // padding:

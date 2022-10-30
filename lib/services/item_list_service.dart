@@ -14,6 +14,7 @@ class ItemListService {
       return [];
     } else {
       return (_itemsDataProvider.loadItemsFromHive(timeSet))!;
+
     }
   }
 
@@ -47,16 +48,16 @@ class ItemListService {
           isPicture: false,
           isTable: false);
       addItemInListTimeSet(timeSet, item);
-      startNumber =  startNumber+1   ;
+      startNumber =  startNumber + 1;
     }
   }
 
-  void addItemInListTimeSet(
-      TimeSet timeSet, Item item) async {
-    await addItemInTimeSet(timeSet, item);//добавляем item в timeSet HiveList itemList
+  void addItemInListTimeSet(TimeSet timeSet, Item item) async {
+    await _itemsDataProvider.addItemInItemsHiveBox(item);
+    await _itemsDataProvider.addItemAsHiveList(timeSet, item);
+    _itemsDataProvider.saveChangesItemInHive(item);
+    timeSet.save();
     updateListItems(timeSet);
-    ///TODO adding number chips
-    //     // await addNumberChipsInHive(startNumber);
   }
 
   void changeDurationOfItems(TimeSet timeSet) {
@@ -75,21 +76,18 @@ class ItemListService {
     await _itemsDataProvider.saveListOfItemsInHive(timeSet, items);
   }
 
-  Future<void> addItemInTimeSet(TimeSet timeSet, Item item) async {
-    await _itemsDataProvider.addItemInItemsHiveBox(item);
-    await _itemsDataProvider.addItemAsHiveList(timeSet, item);
-    _itemsDataProvider.saveChangesItemInHive(item);
-    timeSet.save();
-    ///TODO adding number chips
-    // await addNumberChipsInHive(startNumber);
-  }
+  // Future<void> addItemInTimeSet(TimeSet timeSet, Item item) async {
+  //   await _itemsDataProvider.addItemInItemsHiveBox(item);
+  //   await _itemsDataProvider.addItemAsHiveList(timeSet, item);
+  //   _itemsDataProvider.saveChangesItemInHive(item);
+  //   timeSet.save();
+  // }
 
   void insertItem(TimeSet timeSet, Item item, int index)async{
     final addingItem = Item.clone(item);
     await _itemsDataProvider.addItemInItemsHiveBox(addingItem);
      await _itemsDataProvider.insertItemInHiveList(timeSet, addingItem, index);
     _itemsDataProvider.saveChangesItemInHive(addingItem);
-     //addingItem.save();
     updateListItems(timeSet);
   }
 

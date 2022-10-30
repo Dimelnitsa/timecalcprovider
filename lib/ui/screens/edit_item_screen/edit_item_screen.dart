@@ -11,7 +11,10 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class EditItemScreen extends StatelessWidget {
   final Item item;
-  const EditItemScreen({Key? key, required this.item,}) : super(key: key);
+  const EditItemScreen({
+    Key? key,
+    required this.item,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -44,11 +47,11 @@ class EditItemBody extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: const [
             EditedItemWidget(),
+            WrapNumberChipsWidget(),
             TextInputFieldWidget(),
             // const WrapItemChips(),
-            TextChoiceChipsWidget(),
-            WrapNumberChipsWidget(),
             ListOfSwitchersWidget(),
+            TextChoiceChipsWidget(),
           ],
         ),
       ),
@@ -61,13 +64,3 @@ class EditItemBody extends StatelessWidget {
     );
   }
 }
-
-
-
-
-
-
-
-
-
-

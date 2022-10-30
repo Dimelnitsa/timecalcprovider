@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../timeset_screen/time_set_model.dart';
 import '../edit_item_model.dart';
 
 class WrapNumberChipsWidget extends StatelessWidget {
@@ -10,7 +11,7 @@ class WrapNumberChipsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final numberChips =
-    context.select((EditItemModel model) => model.numberChips);
+    context.select((TimeSetModule model) => model.numberChips);
     final itemChips = context.watch<EditItemModel>().itemChips;
 
     return ListTile(

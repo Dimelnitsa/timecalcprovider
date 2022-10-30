@@ -13,7 +13,9 @@ class ListOfItems extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final items = context.watch<TimeSetModule>().listOfItems;
+    final items = context.watch<TimeSetModule>().items;
+    // final timeSet = context.watch<TimeSetModule>().timeSet;
+
     return NotificationListener<UserScrollNotification>(
       onNotification: (notification) {
         if (notification.direction == ScrollDirection.forward) {
@@ -26,7 +28,7 @@ class ListOfItems extends StatelessWidget {
         }
         return true;
       },
-      child: const CustomScrollView(
+      child: CustomScrollView(
         slivers: [
           SliverAppBar(
             expandedHeight: 56.0,
@@ -42,17 +44,12 @@ class ListOfItems extends StatelessWidget {
   }
 }
 
-class ListOfItemWidgets extends StatefulWidget {
-  const ListOfItemWidgets({Key? key}) : super(key: key);
+class ListOfItemWidgets extends StatelessWidget {
+   ListOfItemWidgets({Key? key,}) : super(key: key);
 
-  @override
-  State<ListOfItemWidgets> createState() => _ListOfItemWidgetsState();
-}
-
-class _ListOfItemWidgetsState extends State<ListOfItemWidgets> {
   @override
   Widget build(BuildContext context) {
-    final _listOfItems = context.watch<TimeSetModule>().listOfItems;
+    final _listOfItems = context.watch<TimeSetModule>().items;
 
     return SliverList(
       delegate: SliverChildBuilderDelegate(
@@ -74,6 +71,7 @@ class _ListOfItemWidgetsState extends State<ListOfItemWidgets> {
                   context,
                   MaterialPageRoute(
                       builder: (context) => EditItemScreen(item: item,)));
+
             },
           );
         },

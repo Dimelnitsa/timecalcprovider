@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import '../../../domain/data_provider/hive_manager.dart';
-import '../../../repository/number_chips_data.dart';
 import '../../../repository/item.dart';
 import '../../../repository/text_choice_chip_data.dart';
+import '../../../repository/time_set.dart';
+import '../../../services/time_set_service.dart';
 
 class EditItemModel extends ChangeNotifier {
+  final _timeSetService = TimeSetService();
+
   Item itemEdited;
-  //TimeSet timeSet;
+  late TimeSet timeSet;
   String? titleItem;
   bool isVerse = false;
   bool isPicture = false;
@@ -18,36 +21,33 @@ class EditItemModel extends ChangeNotifier {
   late final Box<TextChoiceChipData> textChipsBox;
 
   var counter = 1;
-  List<NumberChipData> numberChips = [];
-  late final Box<NumberChipData> numberChipsBox;
 
-  EditItemModel({required this.itemEdited,}) {
+
+  EditItemModel({required this.itemEdited}) {
     titleItem = itemEdited.titleItem;
     itemChips = itemEdited.chipsItem;
     isVerse = itemEdited.isVerse;
     isPicture = itemEdited.isPicture;
     isTable = itemEdited.isTable;
-
+    _initialization();
     setupChoiceChips();
+  }
+  Future<void> _initialization() async {
+    timeSet = await _timeSetService.timeSet;
+    notifyListeners();
   }
 
   Future<void> setupChoiceChips() async {
     textChipsBox = await HiveManager.instance.TextChoiceChipsBox();
-    numberChipsBox = await HiveManager.instance.NumbersChoiceChipsBox();
-
+    notifyListeners();
     readTextChoiceChips();
     textChipsBox.listenable().addListener(() {
       readTextChoiceChips();
     });
-    numberChipsBox.listenable().addListener(() {
-      readTextChoiceChips();
-    });
   }
 
-  void readTextChoiceChips() async{
+  void readTextChoiceChips() async {
     textChoiceChips = textChipsBox.values.toList();
-    //numberChips = timeSet.numberChips as List<NumberChipData>;
-   // numberChips = await _numChipsService.getListOfNumberChips(timeSet);
     notifyListeners();
   }
 
@@ -123,5 +123,4 @@ class EditItemModel extends ChangeNotifier {
     notifyListeners();
     Navigator.pop(context);
   }
-
 }
