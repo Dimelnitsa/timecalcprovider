@@ -10,14 +10,22 @@ class TimeSetDataProvider {
   //     dateTimeSaved: DateTime.now());
   // TimeSet get timeSetFromHive => _timeSetFromHive;
 
-  final Future<Box<TimeSet>> _boxTimeSet =
-      HiveManager.instance.openTimeSetBox();
+  late final Future<Box<TimeSet>> _boxTimeSet;
+  Box<TimeSet> get boxTimeSet => Hive.box('timeset_box');
 
-  Future<TimeSet?> getTimeSetFromHive(String keyOfTimeSet) async {
-    return (await _boxTimeSet).get(keyOfTimeSet) ;
+  TimeSetDataProvider() {
+    initialBoxTimeSet();
   }
 
-  Future<List<TimeSet>> listOTimeSetsFromHive() async {
+  Future<Box<TimeSet>> initialBoxTimeSet() async {
+    return _boxTimeSet = HiveManager.instance.openTimeSetBox();
+  }
+
+  TimeSet? getTimeSetFromHive(String keyOfTimeSet) {
+    return boxTimeSet.get(keyOfTimeSet);
+  }
+
+  Future<List<TimeSet>> listOfTimeSetsFromHive() async {
     return (await _boxTimeSet).values.toList();
   }
 
@@ -30,14 +38,11 @@ class TimeSetDataProvider {
   }
 
   void saveChangesOfTimeSetInHive(TimeSet timeSet) {
-     timeSet.save();
+    timeSet.save();
   }
 
-  Future<void> deleteTimeSetFromHive(TimeSet timeSet)async{
-    await timeSet.delete();
-    (await _boxTimeSet).compact();
+  void deleteTimeSetFromHive(TimeSet timeSet) {
+    timeSet.delete();
+    boxTimeSet.compact();
   }
-
-
-
 }

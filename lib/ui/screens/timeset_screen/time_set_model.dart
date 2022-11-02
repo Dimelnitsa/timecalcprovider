@@ -51,8 +51,8 @@ class TimeSetModule with ChangeNotifier {
     }
   }
 
-  Future<void> loadTimeSet(String keyOfTimeSet) async {
-    _timeSet = await _timeSetService.loadTimeSet(keyOfTimeSet);
+  void loadTimeSet(String keyOfTimeSet) {
+    _timeSet = _timeSetService.loadTimeSet(keyOfTimeSet);
     _items = _itemListService.getListOfItems(_timeSet);
     _numberChips = _numChipsService.getListOfNumberChips(_timeSet);
     notifyListeners();
@@ -61,7 +61,7 @@ class TimeSetModule with ChangeNotifier {
   Future<void> saveNewTimeSetAs(String title) async {
     //1. save  Time Set in Hive
     await _timeSetService.saveNewTimeSet(title);
-    _timeSet = await _timeSetService.loadTimeSet(title);
+    _timeSet = _timeSetService.loadTimeSet(title);
     _timeSetsList = await _timeSetService.loadListOfTimeSets();
     //2. save listItems as HiveList of Time Set in Hive
     await _itemListService.saveListOfItemsForNewTimeSet(_timeSet, _items);
@@ -70,7 +70,7 @@ class TimeSetModule with ChangeNotifier {
     //4. save savedTimeSet
     _timeSetService.saveChangesTimeSet();
     //5. open saved Time Set as current
-    await loadTimeSet(title);
+    loadTimeSet(title);
     _itemListService.updateListItems(timeSet);
     notifyListeners();
   }
@@ -270,9 +270,9 @@ class TimeSetModule with ChangeNotifier {
   }
 
   void deleteTimeSet(String keyOfTimeSet) async {
-    var _deleteTimeSet = await _timeSetService.loadTimeSet(keyOfTimeSet);
+    var _deleteTimeSet = _timeSetService.loadTimeSet(keyOfTimeSet);
     _itemListService.deleteListOfItems(_deleteTimeSet);
-    await _timeSetService.deleteTimeSet();
+    _timeSetService.deleteTimeSet();
     _timeSetsList = await _timeSetService.loadListOfTimeSets();
     notifyListeners();
   }

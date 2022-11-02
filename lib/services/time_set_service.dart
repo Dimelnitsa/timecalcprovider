@@ -15,19 +15,21 @@ class TimeSetService {
   final _timeSetDataProvider = TimeSetDataProvider();
   final _sessionService = SessionService();
 
-  Future<TimeSet> loadTimeSet(String keyOfTimeSet) async {
-    if ((await _timeSetDataProvider.getTimeSetFromHive(keyOfTimeSet)) == null) {
+  TimeSet loadTimeSet(String keyOfTimeSet) {
+    if ((_timeSetDataProvider.getTimeSetFromHive(keyOfTimeSet)) == null) {
       _sessionService.saveLastSession(_timeSet.title);
       return _timeSet;
     } else {
-      _timeSet = (await _timeSetDataProvider.getTimeSetFromHive(keyOfTimeSet))!;
+      _timeSet = (_timeSetDataProvider.getTimeSetFromHive(keyOfTimeSet))!;
       _sessionService.saveLastSession(_timeSet.title);
       return _timeSet;
     }
   }
 
+
+
   Future<List<TimeSet>> loadListOfTimeSets() async {
-    return await _timeSetDataProvider.listOTimeSetsFromHive();
+    return await _timeSetDataProvider.listOfTimeSetsFromHive();
   }
 
   void saveChangesTimeSet() {
@@ -85,7 +87,7 @@ class TimeSetService {
     timeSet.minutesDuration = newValue.minute - startTimeSet().minute;
   }
 
-  Future<void> deleteTimeSet()async{
-    await _timeSetDataProvider.deleteTimeSetFromHive(timeSet);
+  void deleteTimeSet(){
+     _timeSetDataProvider.deleteTimeSetFromHive(timeSet);
       }
 }
