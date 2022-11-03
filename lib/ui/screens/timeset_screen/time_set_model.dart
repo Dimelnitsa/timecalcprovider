@@ -64,7 +64,7 @@ class TimeSetModule with ChangeNotifier {
     _timeSet = _timeSetService.loadTimeSet(title);
     _timeSetsList = await _timeSetService.loadListOfTimeSets();
     //2. save listItems as HiveList of Time Set in Hive
-    await _itemListService.saveListOfItemsForNewTimeSet(_timeSet, _items);
+    _itemListService.saveListOfItemsForNewTimeSet(_timeSet, _items);
     //3. save list of NumberChips in Hive
     await _numChipsService.saveListOfNumberChips(_timeSet);
     //4. save savedTimeSet
@@ -135,6 +135,11 @@ class TimeSetModule with ChangeNotifier {
         notifyListeners();
       }
     }
+  }
+
+  void saveChangesOfItem(Item item) {
+    _itemListService.saveItemInHive(item);
+    notifyListeners();
   }
 
   Future<void> showAlert(BuildContext context) {

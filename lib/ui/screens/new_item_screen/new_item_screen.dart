@@ -69,6 +69,7 @@ class NewItemBody extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
          context.read<NewItemModel>().saveItem(context);
+         Navigator.pop(context);
         },
         child: const Icon(Icons.save),
       ),

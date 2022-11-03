@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:provider/provider.dart';
+import 'package:timecalcprovider/ui/screens/timeset_screen/time_set_model.dart';
 import '../../../domain/data_provider/hive_manager.dart';
 import '../../../repository/item.dart';
 import '../../../repository/text_choice_chip_data.dart';
@@ -119,8 +121,6 @@ class EditItemModel extends ChangeNotifier {
     itemEdited.isVerse = isVerse;
     itemEdited.isPicture = isPicture;
     itemEdited.isTable = isTable;
-    itemEdited.save();
-    notifyListeners();
-    Navigator.pop(context);
+    context.read<TimeSetModule>().saveChangesOfItem(itemEdited);
   }
 }

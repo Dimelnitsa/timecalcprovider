@@ -58,6 +58,7 @@ class EditItemBody extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           context.read<EditItemModel>().saveItem(context);
+          Navigator.pop(context);
         },
         child: const Icon(Icons.save),
       ),

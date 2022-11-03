@@ -5,24 +5,32 @@ import '../../repository/item.dart';
 import 'hive_manager.dart';
 
 class ItemsDataProvider {
-  final Future<Box<Item>> _boxOfItems = HiveManager.instance.openItemsBox();
+  late final Future<Box<Item>> _boxOfItems ;
+  Box<Item> get _openedBoxOfItems => Hive.box('items_box');
 
+  ItemsDataProvider(){
+    initBoxOfItems();
+  }
+
+  Future<Box<Item>> initBoxOfItems(){
+    return _boxOfItems = HiveManager.instance.openItemsBox();
+  }
 
   List<Item>? loadItemsFromHive(TimeSet timeSet) {
     return timeSet.items;
   }
 
 
-  Future<void> addItemAsHiveList(TimeSet timeSet, Item item)async{
-    timeSet.addItem((await _boxOfItems), item);
+  void addItemAsHiveList(TimeSet timeSet, Item item){
+    timeSet.addItem(_openedBoxOfItems, item);
   }
 
-  Future<void> insertItemInHiveList(TimeSet timeSet, Item item, int index)async{
+  void insertItemInHiveList(TimeSet timeSet, Item item, int index){
     timeSet.items?.insert(index, item);
   }
 
-  Future<void> addItemInItemsHiveBox(Item item)async{
-    (await _boxOfItems).add(item);
+  void addItemInItemsHiveBox(Item item){
+    _openedBoxOfItems.add(item);
   }
 
   // void setAverageDurationOfItem(TimeSet timeSet, DateTime averageDurationOfItem) {
@@ -32,21 +40,21 @@ class ItemsDataProvider {
   //   });
   // }
 
-  Future<void> setupDurationForItem(Item item, DateTime duration)async {
+  void setupDurationForItem(Item item, DateTime duration) {
     item.durationHours = duration.hour;
     item.durationInMinutes = duration.minute;
     item.durationInSeconds = duration.second;
-    await item.save();
+    item.save();
   }
 
-  Future<void> saveChangesItemInHive(Item item) async {
-    await item.save();
+  void saveChangesItemInHive(Item item) {
+    item.save();
   }
 
-  Future<void> saveListOfItemsInHive(TimeSet timeSet, List<Item> listItems) async {
+  void saveListOfItemsInHive(TimeSet timeSet, List<Item> listItems) {
     final savedListParts = listItems.map((item) => Item.clone(item)).toList();
-    (await _boxOfItems).addAll(savedListParts);
-    timeSet.addItems((await _boxOfItems), savedListParts);
+    _openedBoxOfItems.addAll(savedListParts);
+    timeSet.addItems(_openedBoxOfItems, savedListParts);
   }
 
   Future<void> deleteItemFromList(TimeSet timeSet, int keyOfTimeSet) async {

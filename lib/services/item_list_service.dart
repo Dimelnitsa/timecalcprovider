@@ -18,6 +18,10 @@ class ItemListService {
     }
   }
 
+  void saveItemInHive(Item item){
+    _itemsDataProvider.saveChangesItemInHive(item);
+  }
+
   /// calculation start time of items
   void calculateStartTimeInListItems({required TimeSet timeSet})  {
     DateTime startTimeOfItem = DateTime(0, 1, 1, timeSet.startHours, timeSet.startMinutes, 0);
@@ -52,9 +56,9 @@ class ItemListService {
     }
   }
 
-  void addItemInListTimeSet(TimeSet timeSet, Item item) async {
-    await _itemsDataProvider.addItemInItemsHiveBox(item);
-    await _itemsDataProvider.addItemAsHiveList(timeSet, item);
+  void addItemInListTimeSet(TimeSet timeSet, Item item) {
+    _itemsDataProvider.addItemInItemsHiveBox(item);
+    _itemsDataProvider.addItemAsHiveList(timeSet, item);
     _itemsDataProvider.saveChangesItemInHive(item);
     timeSet.save();
     updateListItems(timeSet);
@@ -72,8 +76,8 @@ class ItemListService {
     calculateStartTimeInListItems(timeSet: timeSet);
   }
 
-  Future<void> saveListOfItemsForNewTimeSet(TimeSet timeSet, List<Item> items) async {
-    await _itemsDataProvider.saveListOfItemsInHive(timeSet, items);
+  void saveListOfItemsForNewTimeSet(TimeSet timeSet, List<Item> items) {
+     _itemsDataProvider.saveListOfItemsInHive(timeSet, items);
   }
 
   // Future<void> addItemInTimeSet(TimeSet timeSet, Item item) async {
@@ -83,10 +87,10 @@ class ItemListService {
   //   timeSet.save();
   // }
 
-  void insertItem(TimeSet timeSet, Item item, int index)async{
+  void insertItem(TimeSet timeSet, Item item, int index){
     final addingItem = Item.clone(item);
-    await _itemsDataProvider.addItemInItemsHiveBox(addingItem);
-     await _itemsDataProvider.insertItemInHiveList(timeSet, addingItem, index);
+    _itemsDataProvider.addItemInItemsHiveBox(addingItem);
+    _itemsDataProvider.insertItemInHiveList(timeSet, addingItem, index);
     _itemsDataProvider.saveChangesItemInHive(addingItem);
     updateListItems(timeSet);
   }

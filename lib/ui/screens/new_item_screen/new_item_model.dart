@@ -104,8 +104,6 @@ class NewItemModel extends ChangeNotifier {
         isVerse: isVerse,
         isPicture: isPicture,
         isTable: isTable);
-
-    Navigator.pop(context);
   }
 
 

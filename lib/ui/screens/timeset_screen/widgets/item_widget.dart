@@ -14,39 +14,39 @@ class ItemWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final item = context.watch<TimeSetModule>().items[index];
     return Container(
-      margin: const EdgeInsets.only(left: 5.0, right: 5.0, bottom: 5.0),
-      // padding:
-      //     const EdgeInsets.only(left: 5.0, right: 5.0, top: 5.0, bottom: 5.0),
-      decoration: BoxDecoration(
-        color: Colors.blueGrey[200],
-        borderRadius: const BorderRadius.all(
-          Radius.circular(5.0),
-        ),
-      ),
-      child: ListTile(
-        leading: StartTime(item: item),
-        title: Wrap(
-          children: [
-            Wrap(
-              alignment: WrapAlignment.start,
-              children: item.chipsItem!
-                  .map((value) => InputChip(
-                        label: Text(value),
-                        labelStyle: const TextStyle(color: Colors.black),
-                        disabledColor: Colors.white,
-                      ))
-                  .toList(),
+          margin: const EdgeInsets.only(left: 5.0, right: 5.0, bottom: 5.0),
+          // padding:
+          //     const EdgeInsets.only(left: 5.0, right: 5.0, top: 5.0, bottom: 5.0),
+          decoration: BoxDecoration(
+            color: Colors.blueGrey[200],
+            borderRadius: const BorderRadius.all(
+              Radius.circular(5.0),
             ),
-            if (item.isPicture) IsPictureButton(item: item),
-            if (item.isVerse) IsVerseButton(item: item),
-            if (item.isTable) IsTableButton(item: item),
-          ],
-        ),
-        subtitle: item.titleItem != '' ? ItemTitle(item: item) : null,
-        trailing: MyPopupMenuButton(item: item, index: index),
-      ),
-    );
-  }
+          ),
+          child: ListTile(
+            leading: StartTime(item: item),
+            title: Wrap(
+              children: [
+                Wrap(
+                  alignment: WrapAlignment.start,
+                  children: item.chipsItem!
+                      .map((value) => InputChip(
+                            label: Text(value),
+                            labelStyle: const TextStyle(color: Colors.black),
+                            disabledColor: Colors.white,
+                          ))
+                      .toList(),
+                ),
+                if (item.isPicture) IsPictureButton(item: item),
+                if (item.isVerse) IsVerseButton(item: item),
+                if (item.isTable) IsTableButton(item: item),
+              ],
+            ),
+            subtitle: item.titleItem != '' ? ItemTitle(item: item) : null,
+            trailing: MyPopupMenuButton(item: item, index: index),
+          ),
+        );
+      }
 }
 
 class MyPopupMenuButton extends StatelessWidget {

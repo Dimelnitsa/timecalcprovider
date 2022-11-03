@@ -11,18 +11,18 @@ class TimeSetDataProvider {
   // TimeSet get timeSetFromHive => _timeSetFromHive;
 
   late final Future<Box<TimeSet>> _boxTimeSet;
-  Box<TimeSet> get boxTimeSet => Hive.box('timeset_box');
+  Box<TimeSet> get _openedBoxTimeSet => Hive.box('timeset_box');
 
   TimeSetDataProvider() {
     initialBoxTimeSet();
   }
 
-  Future<Box<TimeSet>> initialBoxTimeSet() async {
-    return _boxTimeSet = HiveManager.instance.openTimeSetBox();
+  Future<Box<TimeSet>> initialBoxTimeSet() {
+    return  _boxTimeSet = HiveManager.instance.openTimeSetBox();
   }
 
   TimeSet? getTimeSetFromHive(String keyOfTimeSet) {
-    return boxTimeSet.get(keyOfTimeSet);
+    return _openedBoxTimeSet.get(keyOfTimeSet);
   }
 
   Future<List<TimeSet>> listOfTimeSetsFromHive() async {
@@ -43,6 +43,6 @@ class TimeSetDataProvider {
 
   void deleteTimeSetFromHive(TimeSet timeSet) {
     timeSet.delete();
-    boxTimeSet.compact();
+    _openedBoxTimeSet.compact();
   }
 }

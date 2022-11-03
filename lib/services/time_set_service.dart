@@ -27,7 +27,6 @@ class TimeSetService {
   }
 
 
-
   Future<List<TimeSet>> loadListOfTimeSets() async {
     return await _timeSetDataProvider.listOfTimeSetsFromHive();
   }
@@ -36,7 +35,7 @@ class TimeSetService {
     _timeSetDataProvider.saveChangesOfTimeSetInHive(timeSet);
   }
 
-  Future<void> saveNewTimeSet(String title) async {
+  Future<void> saveNewTimeSet(String title)async {
     final _savedTimeSet = TimeSet(
         title: title,
         startHours: timeSet.startHours,
@@ -87,7 +86,7 @@ class TimeSetService {
     timeSet.minutesDuration = newValue.minute - startTimeSet().minute;
   }
 
-  void deleteTimeSet(){
-     _timeSetDataProvider.deleteTimeSetFromHive(timeSet);
-      }
+  void deleteTimeSet() {
+    _timeSetDataProvider.deleteTimeSetFromHive(timeSet);
+  }
 }
