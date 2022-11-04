@@ -47,10 +47,9 @@ class EditItemBody extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: const [
             EditedItemWidget(),
-            WrapNumberChipsWidget(),
             TextInputFieldWidget(),
-            // const WrapItemChips(),
             ListOfSwitchersWidget(),
+            WrapNumberChipsWidget(),
             TextChoiceChipsWidget(),
           ],
         ),

@@ -33,7 +33,7 @@ class EditedItemWidget extends StatelessWidget {
               children: _itemEdited.chipsItem!
                   .map((value) => ChoiceChip(
                         label: Text(value),
-                        labelStyle: const TextStyle(color: Colors.white),
+                        labelStyle: const TextStyle(fontSize: 16, color: Colors.white),
                         selected: false,
                         disabledColor: Colors.blueGrey,
                         selectedColor: Colors.blueGrey,
@@ -46,7 +46,7 @@ class EditedItemWidget extends StatelessWidget {
           ],
         ),
         // subtitle: item.titleItem != '' ? ItemTitle(item: item) : null,
-        trailing: const DurationItem(),
+        //trailing: const DurationItem(),
       ),
     );
   }
@@ -60,16 +60,19 @@ class StartTime extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _itemEdited = context.read<EditItemModel>().itemEdited;
-
-    // final startTimeItem = TimeOfDay(
-    //     hour: _itemEdited.startTimeItemHours,
-    //     minute: _itemEdited.startTimeItemMinutes);
     final startTime = DateTime(0, 0, 0, _itemEdited.startTimeItemHours,
         _itemEdited.startTimeItemMinutes, _itemEdited.startTimeItemSeconds);
     String formattedDate = DateFormat('HH:mm:ss').format(startTime);
-    return Text(
-      formattedDate,
-      style: const TextStyle(fontSize: 16),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          formattedDate,
+          style: const TextStyle(fontSize: 18),
+        ),
+        DurationItem(),
+      ],
     );
   }
 }
@@ -83,9 +86,13 @@ class DurationItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final _itemEdited =
         context.select((EditItemModel model) => model.itemEdited);
-    return Text(
-      '${_itemEdited.durationHours}:${_itemEdited.durationInMinutes}:${_itemEdited.durationInSeconds}',
-      style: const TextStyle(fontSize: 16),
+    final durationDateFormat = DateTime(0, 0, 0, _itemEdited.durationHours,
+        _itemEdited.durationInMinutes, _itemEdited.durationInSeconds);
+    final duration = DateFormat('HH:mm:ss').format(durationDateFormat);
+
+    return Text(duration,
+     // '${_itemEdited.durationHours}:${_itemEdited.durationInMinutes}:${_itemEdited.durationInSeconds}',
+      style: const TextStyle(fontSize: 14, color: Colors.black38),
     );
   }
 }

@@ -55,6 +55,7 @@ class WrapTextChoiceChips extends StatelessWidget {
           .map((choiceChip) => ChoiceChip(
         label: Text(choiceChip.label),
         labelStyle: const TextStyle(
+          fontSize: 16,
             fontWeight: FontWeight.bold, color: Colors.white),
         //selected: choiceChip.isSelected,
         selected: itemChips!.contains(choiceChip.label),

@@ -9,14 +9,18 @@ class TimeSetupPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      mainAxisSize: MainAxisSize.max,
-      children: const [
-        StartTimeSet(),
-        DurationTimeSet(),
-        FinishTimeSet()
-      ],
+    return Padding(
+      padding: const EdgeInsets.only(top: 16.0, bottom: 8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisSize: MainAxisSize.max,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: const [
+          StartTimeSet(),
+          DurationTimeSet(),
+          FinishTimeSet()
+        ],
+      ),
     );
   }
 }
@@ -32,7 +36,7 @@ class StartTimeSet extends StatelessWidget {
     return Flexible(
       flex: 1,
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(4.0, 4.0, 4.0, 4.0),
+        padding: const EdgeInsets.fromLTRB(8.0, 0.0, 0.0, 0.0),
         child: GestureDetector(
           child: Row(
             children: [
@@ -40,7 +44,7 @@ class StartTimeSet extends StatelessWidget {
               Text(
                 startSet,
                 style: const TextStyle(
-                  fontSize: 20,
+                  fontSize: 22,
                 ),
               ),
             ],
@@ -65,15 +69,16 @@ class DurationTimeSet extends StatelessWidget {
     return Flexible(
       flex: 1,
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(4.0, 0.0, 0.0, 0.0),
+        padding: const EdgeInsets.fromLTRB(4.0, 0.0, 4.0, 0.0),
         child: GestureDetector(
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(Icons.hourglass_empty),
               Text(
                 durationSet,
                 style: const TextStyle(
-                  fontSize: 20,
+                  fontSize: 22,
                 ),
               ),
             ],
@@ -98,15 +103,16 @@ class FinishTimeSet extends StatelessWidget {
     return Flexible(
       flex: 1,
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(4.0, 0.0, 0.0, 0.0),
+        padding: const EdgeInsets.fromLTRB(4.0, 0.0, 8.0, 0.0),
         child: GestureDetector(
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Icon(Icons.hourglass_bottom),
           Text(
             finishSet,
             style: const TextStyle(
-              fontSize: 20,
+              fontSize: 22,
             ),
           ),
             ],

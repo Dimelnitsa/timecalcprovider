@@ -14,39 +14,40 @@ class ItemWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final item = context.watch<TimeSetModule>().items[index];
     return Container(
-          margin: const EdgeInsets.only(left: 5.0, right: 5.0, bottom: 5.0),
-          // padding:
-          //     const EdgeInsets.only(left: 5.0, right: 5.0, top: 5.0, bottom: 5.0),
-          decoration: BoxDecoration(
-            color: Colors.blueGrey[200],
-            borderRadius: const BorderRadius.all(
-              Radius.circular(5.0),
+      margin: const EdgeInsets.only(left: 5.0, right: 5.0, bottom: 5.0),
+      // padding:
+      //     const EdgeInsets.only(left: 5.0, right: 5.0, top: 5.0, bottom: 5.0),
+      decoration: BoxDecoration(
+        color: Colors.blueGrey[200],
+        borderRadius: const BorderRadius.all(
+          Radius.circular(5.0),
+        ),
+      ),
+      child: ListTile(
+        leading: StartTime(item: item),
+        title: Wrap(
+          children: [
+            Wrap(
+              alignment: WrapAlignment.start,
+              children: item.chipsItem!
+                  .map((value) => InputChip(
+                        label: Text(value),
+                        labelStyle:
+                            const TextStyle(fontSize: 16, color: Colors.black),
+                        disabledColor: Colors.white,
+                      ))
+                  .toList(),
             ),
-          ),
-          child: ListTile(
-            leading: StartTime(item: item),
-            title: Wrap(
-              children: [
-                Wrap(
-                  alignment: WrapAlignment.start,
-                  children: item.chipsItem!
-                      .map((value) => InputChip(
-                            label: Text(value),
-                            labelStyle: const TextStyle(color: Colors.black),
-                            disabledColor: Colors.white,
-                          ))
-                      .toList(),
-                ),
-                if (item.isPicture) IsPictureButton(item: item),
-                if (item.isVerse) IsVerseButton(item: item),
-                if (item.isTable) IsTableButton(item: item),
-              ],
-            ),
-            subtitle: item.titleItem != '' ? ItemTitle(item: item) : null,
-            trailing: MyPopupMenuButton(item: item, index: index),
-          ),
-        );
-      }
+            if (item.isPicture) IsPictureButton(item: item),
+            if (item.isVerse) IsVerseButton(item: item),
+            if (item.isTable) IsTableButton(item: item),
+          ],
+        ),
+        subtitle: item.titleItem != '' ? ItemTitle(item: item) : null,
+        trailing: MyPopupMenuButton(item: item, index: index),
+      ),
+    );
+  }
 }
 
 class MyPopupMenuButton extends StatelessWidget {
@@ -90,21 +91,30 @@ class MyPopupMenuButton extends StatelessWidget {
               PopupMenuItem(
                 value: 1,
                 child: Row(
-                  children: [Text(local.add), const Icon(Icons.arrow_upward)],
+                  children: [
+                    const Icon(Icons.arrow_upward),
+                    SizedBox(width:8),
+                    Text(local.add),
+                  ],
                 ),
               ),
               PopupMenuItem(
                 value: 2,
                 child: Row(
-                  children: [Text(local.add), const Icon(Icons.arrow_downward)],
+                  children: [
+                    const Icon(Icons.arrow_downward),
+                    SizedBox(width:8),
+                    Text(local.add),
+                  ],
                 ),
               ),
               PopupMenuItem(
                 value: 4,
                 child: Row(
                   children: [
+                    const Icon(Icons.menu_book),
+                    SizedBox(width:8),
                     Text('${local.quote} '),
-                    const Icon(Icons.menu_book)
                   ],
                 ),
               ),
@@ -112,8 +122,9 @@ class MyPopupMenuButton extends StatelessWidget {
                 value: 5,
                 child: Row(
                   children: [
+                    const Icon(Icons.photo_album),
+                    SizedBox(width:8),
                     Text('${local.illustration} '),
-                    const Icon(Icons.photo_album)
                   ],
                 ),
               ),
@@ -121,8 +132,9 @@ class MyPopupMenuButton extends StatelessWidget {
                 value: 6,
                 child: Row(
                   children: [
+                    const Icon(Icons.table_rows_outlined),
+                    SizedBox(width:8),
                     Text('${local.table} '),
-                    const Icon(Icons.table_rows_outlined)
                   ],
                 ),
               ),
@@ -130,8 +142,9 @@ class MyPopupMenuButton extends StatelessWidget {
                 value: 3,
                 child: Row(
                   children: [
+                    const Icon(Icons.delete_forever),
+                    SizedBox(width:8),
                     Text('${local.delete} '),
-                    const Icon(Icons.delete_forever)
                   ],
                 ),
               ),
@@ -150,7 +163,8 @@ class StartTime extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final startTime = DateTime(0, 0, 0, item.startTimeItemHours,
-        item.startTimeItemMinutes, item.startTimeItemSeconds).toLocal();
+            item.startTimeItemMinutes, item.startTimeItemSeconds)
+        .toLocal();
 
     final formatStartTime = DateFormat('HH:mm:ss').format(startTime);
 
@@ -163,11 +177,11 @@ class StartTime extends StatelessWidget {
       children: [
         Text(
           formatStartTime,
-          style: const TextStyle(fontSize: 16),
+          style: const TextStyle(fontSize: 18),
         ),
         Text(
           duration,
-          style: const TextStyle(fontSize: 12, color: Colors.black38),
+          style: const TextStyle(fontSize: 14, color: Colors.black38),
         ),
       ],
     );

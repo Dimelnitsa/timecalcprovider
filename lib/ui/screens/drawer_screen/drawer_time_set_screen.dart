@@ -42,12 +42,12 @@ class TimeSetItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _timeSet = context.watch<TimeSetModule>().listOfTimeSets[indexInList];
-   // final _lastOpenedTimeSet = context.select((TimeSetModule module) => module.lastOpened);
+   final lastSession = context.select((TimeSetModule module) => module.lastSession);
     final startTimeSet = TimeOfDay(
         hour: _timeSet.startHours, minute: _timeSet.startMinutes);
 
     return Container(
-     // color: (_timeSet.title == _lastOpenedTimeSet) ? Colors.blueGrey[100] : null,
+     color: (_timeSet.title == lastSession) ? Colors.blueGrey[100] : null,
       child: ListTile(
         title: Text(_timeSet.title),
         subtitle: Text(

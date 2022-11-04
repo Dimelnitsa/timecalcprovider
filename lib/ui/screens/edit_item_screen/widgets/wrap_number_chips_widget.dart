@@ -16,32 +16,34 @@ class WrapNumberChipsWidget extends StatelessWidget {
 
     return ListTile(
       title: SizedBox(
-        height: 40,
-        child: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemCount: numberChips.length,
-          itemBuilder: (context, index) {
-            return ChoiceChip(
-              label: Text(numberChips[index].number.toString()),
-              labelStyle: const TextStyle(
-                  fontWeight: FontWeight.bold, color: Colors.white),
-              selected:
-              itemChips!.contains(numberChips[index].number.toString()),
-              selectedColor: Colors.blueGrey,
-              backgroundColor: Colors.blueGrey[200],
-              onSelected: (isSelected) {
-                if (isSelected) {
-                  context
-                      .read<EditItemModel>()
-                      .addItemChips(numberChips[index].number.toString());
-                } else {
-                  context
-                      .read<EditItemModel>()
-                      .removeItemChips(numberChips[index].number.toString());
-                }
-              },
-            );
-          },
+        height: 52,
+        child: Scrollbar(
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: numberChips.length,
+            itemBuilder: (context, index) {
+              return ChoiceChip(
+                label: Text(numberChips[index].number.toString()),
+                labelStyle: const TextStyle(fontSize: 16,
+                    fontWeight: FontWeight.bold, color: Colors.white),
+                selected:
+                itemChips!.contains(numberChips[index].number.toString()),
+                selectedColor: Colors.blueGrey,
+                backgroundColor: Colors.blueGrey[200],
+                onSelected: (isSelected) {
+                  if (isSelected) {
+                    context
+                        .read<EditItemModel>()
+                        .addItemChips(numberChips[index].number.toString());
+                  } else {
+                    context
+                        .read<EditItemModel>()
+                        .removeItemChips(numberChips[index].number.toString());
+                  }
+                },
+              );
+            },
+          ),
         ),
       ),
       // trailing: IconButton(

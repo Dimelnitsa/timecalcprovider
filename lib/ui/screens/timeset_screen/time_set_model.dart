@@ -27,6 +27,7 @@ class TimeSetModule with ChangeNotifier {
   List<NumberChipData> get numberChips => _numberChips;
 
   String? _lastSession;
+  String? get lastSession => _lastSession;
   final _sessionService = SessionService();
 
   bool _isFabVisible = true;
@@ -55,6 +56,7 @@ class TimeSetModule with ChangeNotifier {
     _timeSet = _timeSetService.loadTimeSet(keyOfTimeSet);
     _items = _itemListService.getListOfItems(_timeSet);
     _numberChips = _numChipsService.getListOfNumberChips(_timeSet);
+    _lastSession = keyOfTimeSet;
     notifyListeners();
   }
 
