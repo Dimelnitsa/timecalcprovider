@@ -1,18 +1,16 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:timecalcprovider/ui/screens/timeset_screen/time_set_model.dart';
-import '../../../domain/data_provider/hive_manager.dart';
 import '../../../repository/item.dart';
 import '../../../repository/text_choice_chip_data.dart';
-import '../../../repository/time_set.dart';
-import '../../../services/time_set_service.dart';
+import '../../../services/text_chip_service.dart';
 
 class EditItemModel extends ChangeNotifier {
-  final _timeSetService = TimeSetService();
 
+  final _textChipsService = TextChipsService();
   Item itemEdited;
-  late TimeSet timeSet;
   String? titleItem;
   bool isVerse = false;
   bool isPicture = false;
@@ -20,7 +18,9 @@ class EditItemModel extends ChangeNotifier {
 
   List<String>? itemChips = <String>[];
   List<TextChoiceChipData> textChoiceChips = [];
+
   late final Box<TextChoiceChipData> textChipsBox;
+  ValueListenable<Object>? _listenable;
 
   var counter = 1;
 
@@ -32,35 +32,49 @@ class EditItemModel extends ChangeNotifier {
     isPicture = itemEdited.isPicture;
     isTable = itemEdited.isTable;
     _initialization();
-    setupChoiceChips();
+    //setupChoiceChips();
   }
-  Future<void> _initialization() async {
-    timeSet = await _timeSetService.timeSet;
+
+  Future<void> _initialization()async {
+    await getTextChoiceChips();
+    textChipsBox = _textChipsService.getTextChipsBox();
+    _listenable = textChipsBox.listenable();
+    _listenable?.addListener(getTextChoiceChips);
+
+    // textChipsBox.listenable().addListener(() {
+    //   getTextChoiceChips();
+    //     });
+   // timeSet = await _timeSetService.timeSet;
     notifyListeners();
   }
 
-  Future<void> setupChoiceChips() async {
-    textChipsBox = await HiveManager.instance.TextChoiceChipsBox();
-    notifyListeners();
-    readTextChoiceChips();
-    textChipsBox.listenable().addListener(() {
-      readTextChoiceChips();
-    });
-  }
-
-  void readTextChoiceChips() async {
-    textChoiceChips = textChipsBox.values.toList();
+  Future<void> getTextChoiceChips()async{
+    textChoiceChips = await _textChipsService.getTextChoiceChips();
     notifyListeners();
   }
 
-  Future<void> saveNewTextChoiceChips(String value) async {
+  // Future<void> setupChoiceChips() async {
+  //   //textChipsBox = await HiveManager.instance.TextChoiceChipsBox();
+  //   notifyListeners();
+  //   //getTextChoiceChips();
+  //   //textChipsBox.listenable().addListener(() {
+  //     getTextChoiceChips();
+  //   });
+  // }
+
+  // void getTextChoiceChips() async {
+  //   textChoiceChips = textChipsBox.values.toList();
+  //   notifyListeners();
+  // }
+
+  void saveNewTextChoiceChips(String value) {
     final newTextChip = TextChoiceChipData(
       label: value,
       isSelected: false,
       //selectedColor: Colors.blue,
       //textColor: Colors.white,
     );
-    textChipsBox.add(newTextChip);
+    _textChipsService.addNewTextChip(newTextChip);
     notifyListeners();
   }
 
@@ -99,16 +113,24 @@ class EditItemModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void addTextChoiceChips(String value) {
-    final newTextChip = TextChoiceChipData(
-      label: value,
-      isSelected: false,
-      //selectedColor: Colors.blue,
-      // textColor: Colors.white,
-    );
-    textChoiceChips.add(newTextChip);
+  void deleteItemChips(
+      // TextChoiceChipData textChoiceChipData,
+       int index){
+    //textChoiceChips.remove(textChoiceChipData);
+    _textChipsService.deleteTextChipFromList(index);
     notifyListeners();
   }
+
+  // void addTextChoiceChips(String value) {
+  //   final newTextChip = TextChoiceChipData(
+  //     label: value,
+  //     isSelected: false,
+  //     //selectedColor: Colors.blue,
+  //     // textColor: Colors.white,
+  //   );
+  //   textChoiceChips.add(newTextChip);
+  //   notifyListeners();
+  // }
 
   void addNumberChips() {
     //numberChips.add(counter++);
@@ -122,5 +144,11 @@ class EditItemModel extends ChangeNotifier {
     itemEdited.isPicture = isPicture;
     itemEdited.isTable = isTable;
     context.read<TimeSetModule>().saveChangesOfItem(itemEdited);
+  }
+
+  @override
+  void dispose() {
+    _listenable?.removeListener(getTextChoiceChips);
+    super.dispose();
   }
 }

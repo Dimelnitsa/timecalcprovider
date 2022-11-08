@@ -14,6 +14,16 @@ class NumeralItemDialog extends StatefulWidget {
 
 class _NumeralItemDialogState extends State<NumeralItemDialog> {
 
+  final _controller = TextEditingController();
+  final _controllerStartNumber = TextEditingController();
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    _controllerStartNumber.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final _modelWatch = context.watch<CounterModel>();
@@ -22,9 +32,8 @@ class _NumeralItemDialogState extends State<NumeralItemDialog> {
     int startNumber = _modelWatch.startNumber;
     int counter = _modelWatch.counter;
 
-
-    final _controller = TextEditingController(text: '$counter');
-    final _controllerStartNumber = TextEditingController(text: '$startNumber');
+    _controller.text = counter.toString();
+    _controllerStartNumber.text = startNumber.toString();
 
     return AlertDialog(
       // title: const Text('Добавить несколько'),

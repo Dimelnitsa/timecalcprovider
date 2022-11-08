@@ -45,9 +45,9 @@ class HiveManager{
     return await Hive.openBox<Item>('items_box');
   }
 
-  Future<Box<TextChoiceChipData>> TextChoiceChipsBox() {
+  Future<Box<TextChoiceChipData>> TextChoiceChipsBox() async{
     registerAdapter(typeId: 1, typeAdapter: TextChoiceChipDataAdapter());
-    return Hive.openBox<TextChoiceChipData>('textChoiceChips');
+    return await Hive.openBox<TextChoiceChipData>('textChoiceChips');
   }
 
   Future<Box<NumberChipData>> NumbersChoiceChipsBox(){

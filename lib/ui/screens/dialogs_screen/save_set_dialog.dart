@@ -2,18 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../timeset_screen/time_set_model.dart';
 
-class SaveSetDialog extends StatefulWidget {
-  const SaveSetDialog({Key? key}) : super(key: key);
-
+class DialogSaveTimeSetAs extends StatefulWidget {
+  const DialogSaveTimeSetAs({Key? key}) : super(key: key);
   @override
-  State<SaveSetDialog> createState() => _SaveSetDialogState();
+  State<DialogSaveTimeSetAs> createState() => _DialogSaveTimeSetAsState();
 }
 
-class _SaveSetDialogState extends State<SaveSetDialog> {
+class _DialogSaveTimeSetAsState extends State<DialogSaveTimeSetAs> {
+  var _controller = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
-    var _controller = TextEditingController();
-
     return AlertDialog(
       title: const Text('Сохранить'),
       content: TextField(
@@ -30,12 +29,18 @@ class _SaveSetDialogState extends State<SaveSetDialog> {
         ),
         TextButton(
           onPressed: () {
-           context.read<TimeSetModule>().saveNewTimeSetAs(_controller.text);
+            context.read<TimeSetModule>().saveNewTimeSetAs(_controller.text);
             Navigator.pop(context);
           },
           child: const Text('Ok'),
         ),
       ],
     );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 }

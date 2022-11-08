@@ -18,15 +18,18 @@ class EditItemScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ///TODO change _timeSet to real variable
+
     // final _timeSet = TimeSet(
     //     title: 'Новый',
     //     startHours: TimeOfDay.now().hour.toInt(),
     //     startMinutes: TimeOfDay.now().minute.toInt(),
     //     dateTimeSaved: DateTime.now());;
-    return ChangeNotifierProvider(
-      create: (context) => EditItemModel(itemEdited: item),
-      child: const EditItemBody(),
+    return ChangeNotifierProvider<EditItemModel>(
+      create: (_) => EditItemModel(itemEdited: item),
+      builder: (context, child){
+        return const EditItemBody();
+      },
+       //child: const EditItemBody(),
     );
   }
 }
@@ -63,4 +66,6 @@ class EditItemBody extends StatelessWidget {
       ),
     );
   }
+
+
 }

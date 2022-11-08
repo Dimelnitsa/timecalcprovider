@@ -45,7 +45,7 @@ List<Widget> ListOfActionButtons(BuildContext context){
   return [
     IconButton(
         onPressed: () {
-          showDialogSaveSet(context);
+          showDialogSaveTimeSetAs(context);
         },
         icon: const Icon(Icons.save)),
     IconButton(
@@ -64,10 +64,10 @@ List<Widget> ListOfActionButtons(BuildContext context){
 }
 
 
-Future<void> showDialogSaveSet(BuildContext context) {
+Future<void> showDialogSaveTimeSetAs(BuildContext context) {
   return showDialog(
     context: context,
-    builder: (context) => const SaveSetDialog(),
+    builder: (context) => const DialogSaveTimeSetAs(),
   );
 }
 

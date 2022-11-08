@@ -5,7 +5,7 @@ import '../../repository/item.dart';
 import 'hive_manager.dart';
 
 class ItemsDataProvider {
-  late final Future<Box<Item>> _boxOfItems ;
+  late final Future<Box<Item>> _boxOfItems;
   Box<Item> get _openedBoxOfItems => Hive.box('items_box');
 
   ItemsDataProvider(){

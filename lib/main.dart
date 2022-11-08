@@ -23,7 +23,6 @@ void main() async {
 }
 
 Future<void> initFlutterHive() async{
-
   await Hive.initFlutter();
 }
 
